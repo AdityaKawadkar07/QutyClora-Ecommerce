@@ -7,18 +7,14 @@ import path from 'path';
 import cors from 'cors';
 import crypto from 'crypto';
 import sendEmail from './helpers/sendEmail.js';
-import { GoogleSpreadsheet } from 'google-spreadsheet';
-import { GoogleAuth } from 'google-auth-library';
-import creds from './google-credentials.json' assert { type: 'json' }; // Path to your service account JSON
 import cloudinary from 'cloudinary'
-import { type } from 'os';
 import cron from 'node-cron'
 
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
 const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
-const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_URL;
+
 const SECRET_KEY = process.env.JWT_SECRET;
 
 
