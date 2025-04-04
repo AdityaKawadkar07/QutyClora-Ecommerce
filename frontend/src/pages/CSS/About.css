@@ -1,0 +1,28 @@
+.about-page {
+    width: 100%;
+    background: #fce3fe;
+    padding-top: 50px;
+  }
+  @media (max-width: 1280px) {
+    .about-page {
+        padding-top: 40px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .about-page {
+        padding-top: 35px;
+    }
+}
+
+@media (max-width: 800px) {
+    .about-page {
+        padding-top: 30px;
+    }
+}
+
+@media (max-width: 500px) {
+    .about-page {
+        padding-top: 25px;
+    }
+}

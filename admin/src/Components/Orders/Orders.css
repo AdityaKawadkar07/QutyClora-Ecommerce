@@ -1,0 +1,226 @@
+.orders {
+  width: 90%;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.orders h1 {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+/* Grid Layout for Header & Rows */
+.orders-header,
+.orders-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1.5fr 2fr 1fr 1fr 1fr 1.5fr 1.5fr; /* Adjusted column width for Payment Receipt */
+  gap: 10px;
+  width: 100%;
+  padding: 12px 0;
+  align-items: center;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Header Styling */
+.orders-header {
+  font-weight: bold;
+  background-color: #f4f4f4;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 12px;
+  text-transform: uppercase;
+}
+
+/* Row Styling */
+.orders-row {
+  background-color: white;
+  transition: background 0.3s ease;
+}
+
+.orders-row:nth-child(even) {
+  background-color: #f8f8f8;
+}
+
+.orders-row:hover {
+  background-color: #f0f0f0;
+}
+
+/* Product Section with Dropdown */
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.orders-product-icon {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+.product-hover{
+  cursor: pointer;
+}
+
+/* Product Details Dropdown */
+.product-details {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #555;
+  background: #f4f4f4;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+/* Address Tooltip & Truncated Text */
+.address-hover {
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  cursor: pointer;
+  color: #333;
+  font-size: 14px;
+}
+
+.address-hover.expanded {
+  display: none;
+}
+
+.address-hover:hover::after {
+  content: attr(title);
+  position: absolute;
+  white-space: normal;
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  width: 250px;
+  top: 20px;
+  left: 0;
+  z-index: 10;
+}
+
+.amount-hover {
+  cursor: pointer;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.amount-hover:hover {
+  text-decoration: underline;
+}
+
+.amount-details {
+  background: #f4f4f4;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+
+/* Select Dropdown (Status) */
+.orders-row select {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.orders-row select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Button-like Select on Focus */
+.orders-row select:hover {
+  background-color: #f4f4f4;
+}
+
+/* Row Padding for Better Spacing */
+.orders-row p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.payment-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.payment-link:hover {
+  color: #0056b3;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 800px) {
+  .orders-header,
+  .orders-row {
+    grid-template-columns: 1fr 1.5fr 1.5fr 1fr 1fr 1fr; /* Reduce columns for smaller screens */
+    gap: 8px;
+  }
+
+  .orders-header p:nth-child(6),
+  .orders-header p:nth-child(7),
+  .orders-header p:nth-child(9),
+  .orders-row p:nth-child(6),
+  .orders-row p:nth-child(7),
+  .orders-row p:nth-child(9) {
+    display: none; /* Hide Total Items, Total Amount & Payment Receipt for smaller screens */
+  }
+}
+
+@media (max-width: 500px) {
+  .orders {
+    padding: 10px;
+    margin: 10px;
+  }
+
+  .orders-header,
+  .orders-row {
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 5px;
+  }
+
+  .orders-header p:nth-child(4),
+  .orders-header p:nth-child(5),
+  .orders-header p:nth-child(9),
+  .orders-row p:nth-child(4),
+  .orders-row p:nth-child(5),
+  .orders-row p:nth-child(9) {
+    display: none; /* Hide Address, Contact & Payment Receipt for very small screens */
+  }
+
+  .product-info {
+    gap: 5px;
+  }
+
+  .orders-product-icon {
+    width: 40px;
+    height: 40px;
+  }
+}

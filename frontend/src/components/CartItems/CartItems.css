@@ -1,0 +1,425 @@
+.cartitems{
+    margin: 100px 170px;
+}
+.cartitems hr{
+    height: 3px;
+    background: #e2e2e2;
+    border: 0;
+}
+.cartitems-format-main{
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+    gap: 75px;
+    padding: 20px 0px;
+    color: #454545;
+    font-size: 18px;
+    font-weight: 600;
+}
+.cartitems-format{
+    font-size: 17px;
+    font-weight: 500;
+}
+.carticon-product-icon{
+    height: 62px;
+}
+.cartitems-remove-icon{
+    width: 15px;
+    margin: 0px 40px;
+    cursor: pointer;
+}
+.cartitems-quantity{
+    width: 64px;
+    height: 50px;
+    border: 2px solid #ebebeb;
+}
+.cartitems-down{
+    display: flex;
+    margin: 100px 0px;
+}
+.cartitems-total{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-right: 200px;
+    gap: 40px;
+}
+.cartitems-total-item{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0px;
+}
+.cartitems-total button{
+    width: 262px;
+    height: 58px;
+    outline: none;
+    border: none;
+    background: #ff5a5a;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.cartitems-promocode{
+    flex: 1;
+    font-size: 16px;
+    font-weight: 500;
+}
+.cartitems-promocode p{
+    color: #555;
+}
+.cartitems-promobox{
+    width: 504px;
+    margin-top: 15px;
+    padding-left: 20px;
+    height: 58px;
+    background: #eaeaea;
+}
+.cartitems-promobox input{
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    width: 330px;
+    height: 50px;
+}
+.cartitems-promobox button{
+    width: 170px;
+    height: 58px;
+    font-size: 16px;
+    background: black;
+    color: white;
+    cursor: pointer;
+}
+@media(max-width:1280px){
+    .cartitems{
+        margin: 60px 50px;
+    }
+    .cartitems-format-main{
+        grid-template-columns: 0.5fr 4fr 0.5fr 0.5fr 0.5fr 0.5fr;
+        gap: 20px;
+        padding: 15px 0px;
+        font-size: 15px;
+    }
+    .carticon-product-icon{
+        height: 50px;
+    }
+    .cartitems-remove-icon{
+        margin: auto;
+    }
+    .cartitems-quantity{
+        width: 40px;
+        height: 30px;
+    }
+    .cartitems-down{
+        margin: 80px 0px;
+        flex-direction: column;
+        gap: 80px;
+    }
+    .cartitems-total{
+        margin: 0px;
+    }
+    .cartitems-total button{
+        max-width:200px;
+        font-size: 13px;
+    }
+    .cartitems-promobox{
+        width: auto;
+        max-width: 500px;
+    }
+    .cartitems-promobox input{
+        width: 100%;
+    }
+    .cartitems-promobox button{
+        width: 120px;
+        margin-left: -125px;
+    }
+}
+@media(max-width:500px){
+    .cartitems-format-main{
+        display: none;
+        grid-template-columns:0.5fr 3fr 0.5fr;
+        gap: 10px;
+    }
+    .cartitems-format{
+        display: grid;
+    }
+}
+
+.cartitems-promocode p {
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.cartitems-promobox {
+    width: 504px;
+    margin-top: 15px;
+    padding-left: 20px;
+    height: 58px;
+    background: #eaeaea;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cartitems-promobox input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    width: 330px;
+    height: 50px;
+}
+
+.cartitems-promobox button {
+    width: 170px;
+    height: 58px;
+    font-size: 16px;
+    background: black;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+/* Search Coupon Button */
+.search-coupon-btn {
+    width: 170px;
+    height: 50px;
+    background: #ff5a5a;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Promo Dialog */
+.promo-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.promo-dialog-content {
+    background: white;
+    width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    max-height: 70%;
+    overflow-y: auto;
+}
+
+.promo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.promo-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.promo-item-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Yeh change karo */
+    align-items: flex-start; /* Yeh bhi add karo */
+    gap: 2px;
+}
+
+/* .promo-item-content h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.promo-item-content p {
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+} */
+
+.promo-item:hover {
+    background: #f9f9f9;
+}
+.promo-item-content {
+    margin-left: 10px;
+}
+
+.promo-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+}
+
+.close-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #ff5a5a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.coupon-message {
+    margin-top: 10px;
+    color: green;
+    font-size: 14px;
+}
+
+/* Applied Coupon */
+.cartitems-applied-coupon {
+    padding: 10px 20px;
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #155724;
+}
+@media(max-width: 1080px) {
+    .cartitems-promobox {
+        width: 100%;
+        max-width: 450px;
+    }
+    .cartitems-promobox input {
+        width: 100%;
+    }
+    .cartitems-promobox button {
+        width: 140px;
+        margin-left: -145px;
+    }
+    .promo-dialog-content {
+        width: 80%;
+        padding: 15px;
+    }
+    .promo-item {
+        padding: 8px;
+    }
+    .promo-item img {
+        width: 40px;
+        height: 40px;
+    }
+    .close-btn {
+        width: 100%;
+    }
+}
+
+/* Media query for 800px */
+@media(max-width: 800px) {
+    .cartitems-promobox {
+        flex-direction: row;
+        justify-content: space-between;
+        height: 50px;
+        padding-left: 10px;
+    }
+    .cartitems-promobox input {
+        width: 100%;
+        font-size: 14px;
+        height: 45px;
+    }
+    .cartitems-promobox button {
+        width: 120px;
+        height: 50px;
+        font-size: 14px;
+        margin-left: -125px;
+    }
+    .search-coupon-btn {
+        width: 120px;
+        height: 45px;
+        font-size: 14px;
+    }
+    .promo-dialog-content {
+        width: 90%;
+        padding: 15px;
+    }
+    .promo-item {
+        padding: 8px;
+    }
+    .promo-item img {
+        width: 35px;
+        height: 35px;
+    }
+    .close-btn {
+        width: 100%;
+        padding: 8px 15px;
+    }
+}
+
+/* Media query for 500px */
+@media(max-width: 500px) {
+    .cartitems-promocode p {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+    .cartitems-promobox {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        padding-left: 10px;
+        height: auto;
+        gap: 10px;
+    }
+    .cartitems-promobox input {
+        width: 100%;
+        height: 40px;
+        font-size: 14px;
+        padding-left: 10px;
+    }
+    .cartitems-promobox button {
+        width: 100%;
+        height: 45px;
+        font-size: 14px;
+        margin-left: 0;
+    }
+    .search-coupon-btn {
+        width: 100%;
+        height: 45px;
+        font-size: 14px;
+    }
+    .promo-dialog-content {
+        width: 85%;
+        padding: 10px;
+        max-height: 65%;
+    }
+    .promo-item {
+        padding: 6px;
+    }
+    .promo-item img {
+        width: 30px;
+        height: 30px;
+    }
+    .promo-item-content h3 {
+        font-size: 14px;
+    }
+    .promo-item-content p {
+        font-size: 12px;
+    }
+    .close-btn {
+        width: 100%;
+        padding: 8px;
+        font-size: 14px;
+    }
+    .coupon-message {
+        font-size: 12px;
+    }
+    .cartitems-applied-coupon {
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+}

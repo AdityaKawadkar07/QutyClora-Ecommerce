@@ -1,0 +1,141 @@
+/* Modal overlay to blur the background */
+.receipt-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  /* Main receipt modal */
+  .receipt-modal {
+    background: #fff;
+    width: 500px;
+    max-width: 90%;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Receipt header styles */
+  .receipt-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+  }
+  .receipt-header p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* Divider */
+  .receipt-divider {
+    border-top: 1px solid #ccc;
+    margin: 10px 0;
+  }
+  
+  /* Customer info */
+  .receipt-customer-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    text-align: left;
+  }
+  
+  /* Receipt table */
+  .receipt-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  .receipt-table th,
+  .receipt-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    text-align: center;
+  }
+  .receipt-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+  
+  /* Receipt summary */
+  .receipt-summary {
+    text-align: right;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  .receipt-summary p {
+    margin: 5px 0;
+  }
+  .receipt-total {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Receipt image */
+  .receipt-img-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  .receipt-img-container img {
+    width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+  
+  /* Close button */
+  .receipt-close-btn {
+    margin-top: 15px;
+    padding: 8px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .receipt-close-btn:hover {
+    background-color: #ff3333;
+  }
+  .receipt-download-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .receipt-download-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .receipt-modal {
+    position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  

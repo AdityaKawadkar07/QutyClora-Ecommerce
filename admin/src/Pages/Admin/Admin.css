@@ -1,0 +1,73 @@
+.admin {
+    display: flex;
+    position: relative;
+}
+
+/* Sidebar styles */
+.sidebar-container {
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Hide sidebar by default on small screens */
+@media (max-width: 800px) {
+    .admin {
+        flex-direction: column;
+    }
+
+    .sidebar-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 250px;
+        background: #fff;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        transform: translateX(-100%);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column; /* Ensure vertical layout */
+        align-items: flex-start; /* Align items to the left */
+        padding-top: 85px; /* Add some space at the top */
+        padding-left: 30px;
+        padding: auto;
+    }
+
+    /* Show sidebar when menu button is clicked */
+    .sidebar-container.show {
+        transform: translateX(0);
+    }
+
+    /* Sidebar items should be displayed in a column */
+    .sidebar-container .sidebar {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Align items to the left */
+    }
+
+    /* Hide menu button on larger screens */
+    .menu-btn {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 1100;
+        display: block;
+    }
+
+    /* Hide menu button on larger screens */
+    @media (min-width: 801px) {
+        .menu-btn {
+            display: none;
+        }
+    }
+
+    /* Main content should not shift */
+    .admin-content {
+        margin-left: 0;
+        width: 100%;
+    }
+}

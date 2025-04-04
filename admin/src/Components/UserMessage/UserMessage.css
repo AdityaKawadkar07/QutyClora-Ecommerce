@@ -1,0 +1,49 @@
+.usermessagelist {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.usermessage h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.usermessage-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 0.5fr;
+    width: 100%;
+    gap: 20px;
+    padding: 10px 0;
+    border-bottom: 2px solid #333;
+    font-weight: bold;
+}
+
+.usermessage-allmessage {
+    margin-top: 20px;
+}
+
+.usermessage-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 0.5fr;
+    gap: 20px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.usermessage-row p {
+    margin: 0;
+}
+
+.usermessage-remove-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+.usermessage-remove-icon:hover {
+    opacity: 0.8;
+}

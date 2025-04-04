@@ -1,0 +1,131 @@
+.shop{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 100px;
+}
+.shop h1{
+    color: #171717;
+    font-size: 50px;
+    font-weight: 600; 
+}
+.shop hr{
+    width: 200px;
+    height: 6px;
+    border-radius: 10px;
+    background: #252525;
+}
+.products{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    margin-top: 50px;
+    gap: 30px;
+}
+.shop-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    max-width: 1000px;
+    margin-top: 10px;
+}
+
+.search-bar {
+    width: 60%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.sort-dropdown {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background: white;
+    cursor: pointer;
+}
+.products-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+/* Responsive Design */
+@media (max-width: 1280px) {
+    .products {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
+    }
+
+    .shop h1 {
+        font-size: 45px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .products {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .shop h1 {
+        font-size: 40px;
+    }
+
+    .shop-controls {
+        flex-direction: column;
+        gap: 10px;
+        width: 90%;
+    }
+
+    .search-bar {
+        width: 100%;
+    }
+
+    .sort-dropdown {
+        width: 100%;
+    }
+}
+
+@media (max-width: 800px) {
+    .products {
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .shop h1 {
+        font-size: 35px;
+    }
+
+    .shop hr {
+        width: 150px;
+        height: 5px;
+    }
+}
+
+@media (max-width: 500px) {
+    .products {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .shop h1 {
+        font-size: 30px;
+    }
+
+    .shop hr {
+        width: 120px;
+        height: 4px;
+    }
+
+    .shop-controls {
+        width: 100%;
+    }
+
+    .search-bar, .sort-dropdown {
+        width: 90%;
+    }
+}

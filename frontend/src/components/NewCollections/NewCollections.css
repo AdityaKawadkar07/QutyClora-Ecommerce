@@ -1,0 +1,103 @@
+.new-collections {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    padding: 60px 20px; /* Reduced padding for smaller screens */
+    border-radius: 15px;
+    margin-bottom: 80px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .new-collections h1 {
+    font-size: 60px;
+    font-weight: 600;
+    color: #d81b60;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    text-align: center; /* Center text */
+  }
+  
+  .new-collections hr {
+    width: 200px;
+    height: 3px;
+    border-radius: 5px;
+    background: #d81b60;
+    margin-top: 20px; /* Added margin for spacing */
+  }
+  
+  .collections {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 products in one row */
+    gap: 40px;
+    justify-content: center;
+    margin-top: 30px;
+    width: 80%; /* Ensure the container takes full width */
+  }
+  
+  .collections .item {
+    transition: transform 0.3s ease;
+    border: 1px solid #f8bbd0;
+    padding: 15px;
+    border-radius: 10px;
+    margin: auto;
+    gap: 10px;
+    background: white;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%; /* Ensure it takes the full width of each grid cell */
+  }
+  
+  .collections .item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Large Screens */
+  @media (max-width: 1280px) {
+    .new-collections h1 {
+      font-size: 50px;
+    }
+  
+    .collections {
+      gap: 25px; /* Adjust gap */
+    }
+  }
+  
+  /* Medium Screens (tablets and smaller laptops) */
+  @media (max-width: 1024px) {
+    .new-collections h1 {
+      font-size: 45px;
+    }
+  
+    .collections {
+      gap: 20px; /* Adjust gap */
+    }
+  }
+  
+  /* Small Screens (mobile devices) */
+  @media (max-width: 800px) {
+    .new-collections h1 {
+      font-size: 35px; /* Adjust font size */
+    }
+  
+    .collections {
+      grid-template-columns: 1fr 1fr; /* 2 products per row */
+      gap: 20px; /* Adjust gap */
+      padding: 0 10px; /* Reduce padding on mobile */
+    }
+  }
+  
+  /* Extra Small Screens */
+  @media (max-width: 500px) {
+    .new-collections h1 {
+      font-size: 30px; /* Further adjust font size */
+    }
+  
+    .collections {
+      grid-template-columns: 1fr; /* 1 product per row */
+      gap: 15px; /* Adjust gap */
+    }
+  }
+  

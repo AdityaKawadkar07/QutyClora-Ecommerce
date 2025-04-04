@@ -1,0 +1,242 @@
+.how-we-source-section {
+    padding: 60px 20px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  
+  .how-we-source-section h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #099909;
+    text-align: center;
+  }
+  
+  .how-we-source-section p {
+    font-size: 18px;
+    color: #4d4d4d;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .how-we-source-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .how-we-source-item {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .how-we-source-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .how-we-source-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .how-we-source-item h3 {
+    font-size: 22px;
+    color: #171717;
+    margin-bottom: 10px;
+  }
+  
+  .how-we-source-item p {
+    font-size: 16px;
+    color: #4d4d4d;
+    line-height: 1.6;
+  }
+  
+  .how-we-source-button {
+    display: block;
+    margin-top: 30px;
+    padding: 12px 30px;
+    background-color: #ff4141;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .how-we-source-button:hover {
+    background-color: #e03e3e;
+  }
+  
+  .how-we-source-button:active {
+    transform: scale(0.98);
+  }
+  
+  @media (max-width: 768px) {
+    .how-we-source-grid {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .how-we-source-item {
+      width: 90%;
+    }
+  
+    .how-we-source-section h2 {
+      font-size: 28px;
+    }
+  
+    .how-we-source-item h3 {
+      font-size: 20px;
+    }
+  
+    .how-we-source-item p {
+      font-size: 14px;
+    }
+  }
+  @media (max-width: 1280px) {
+    .how-we-source-section {
+      padding: 50px 20px;
+    }
+  
+    .how-we-source-section h2 {
+      font-size: 30px;
+    }
+  
+    .how-we-source-section p {
+      font-size: 16px;
+    }
+  
+    .how-we-source-grid {
+      gap: 20px;
+    }
+  
+    .how-we-source-item {
+      width: 250px;
+    }
+  
+    .how-we-source-item h3 {
+      font-size: 20px;
+    }
+  
+    .how-we-source-item p {
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 1024px) {
+    .how-we-source-section {
+      padding: 45px 20px;
+    }
+  
+    .how-we-source-section h2 {
+      font-size: 28px;
+    }
+  
+    .how-we-source-section p {
+      font-size: 15px;
+    }
+  
+    .how-we-source-grid {
+      gap: 25px;
+    }
+  
+    .how-we-source-item {
+      width: 280px;
+    }
+  
+    .how-we-source-item h3 {
+      font-size: 20px;
+    }
+  
+    .how-we-source-item p {
+      font-size: 15px;
+    }
+  
+    .how-we-source-button {
+      padding: 12px 28px;
+      font-size: 16px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .how-we-source-section {
+      padding: 35px 20px;
+    }
+  
+    .how-we-source-section h2 {
+      font-size: 24px;
+    }
+  
+    .how-we-source-section p {
+      font-size: 14px;
+    }
+  
+    .how-we-source-grid {
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+  
+    .how-we-source-item {
+      width: 90%;
+    }
+  
+    .how-we-source-item h3 {
+      font-size: 18px;
+    }
+  
+    .how-we-source-item p {
+      font-size: 14px;
+    }
+  
+    .how-we-source-button {
+      padding: 10px 25px;
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 500px) {
+    .how-we-source-section {
+      padding: 25px 10px;
+    }
+  
+    .how-we-source-section h2 {
+      font-size: 22px;
+    }
+  
+    .how-we-source-section p {
+      font-size: 13px;
+    }
+  
+    .how-we-source-item h3 {
+      font-size: 16px;
+    }
+  
+    .how-we-source-item p {
+      font-size: 13px;
+    }
+  
+    .how-we-source-button {
+      padding: 10px 20px;
+      font-size: 12px;
+    }
+  }
+  

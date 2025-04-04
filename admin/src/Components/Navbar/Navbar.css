@@ -1,0 +1,60 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 60px;
+    box-shadow: 0 1px 3px -2px #000;
+    background: white;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-logo {
+    width: 200px;
+}
+
+.nav-profile {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.logout-btn {
+    padding: 8px 12px;
+    background-color: rgb(41, 54, 198);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #cc0000;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 800px) {
+    .navbar {
+        padding: 10px 20px;
+    }
+
+    .nav-logo {
+        width: 140px;
+    }
+
+    /* Hide profile icon and welcome message on mobile */
+    .nav-profile,
+    .nav-right h5 {
+        display: none;
+    }
+
+    .logout-btn {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+}
