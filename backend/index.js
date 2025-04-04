@@ -13,7 +13,6 @@ import cron from 'node-cron'
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
-const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
@@ -73,7 +72,7 @@ app.post("/upload", upload.array('product', 4), (req, res) => {
         }
 
         const imageUrls = req.files.map(file => ({
-            url: `${BASE_URL}/images/${file.filename}`,
+            url: `/images/${file.filename}`,
             filename: file.filename,
             size: file.size
         }));
