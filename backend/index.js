@@ -9,7 +9,6 @@ import crypto from 'crypto';
 import sendEmail from './helpers/sendEmail.js';
 import {v2 as cloudinary} from 'cloudinary'
 import cron from 'node-cron'
-import {CloudinaryStorage} from 'multer-storage-cloudinary';
 import { v4 as uuidv4 } from 'uuid';
 import streamifier from 'streamifier';
 
