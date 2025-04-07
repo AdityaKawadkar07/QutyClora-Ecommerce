@@ -7,9 +7,11 @@ import path from 'path';
 import cors from 'cors';
 import crypto from 'crypto';
 import sendEmail from './helpers/sendEmail.js';
-import cloudinary from 'cloudinary'
+import {v2 as cloudinary} from 'cloudinary'
 import cron from 'node-cron'
 import {CloudinaryStorage} from 'multer-storage-cloudinary';
+import { v4 as uuidv4 } from 'uuid';
+import streamifier from 'streamifier';
 
 dotenv.config();
 
@@ -60,21 +62,25 @@ cloudinary.config({
 //   const productUpload = multer({ storage: productStorage });
 
 // Image Storage Engine with unique filenames
-const storage = multer.diskStorage({
-    destination: "./upload/images",
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        return cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`);
-    }
-});
+// const storage = multer.diskStorage({
+//     destination: "./upload/images",
+//     filename: (req, file, cb) => {
+//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+//         return cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`);
+//     }
+// });
+
+// Use memory storage instead of disk
+const storage = multer.memoryStorage();
+
 
 const upload = multer({
     storage: storage,
     limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit per file
 });
 
-// Creating Upload Endpoint for Images
-app.use('/images', express.static('upload/images'));
+// // Creating Upload Endpoint for Images
+// app.use('/images', express.static('upload/images'));
 
 app.post("/upload", upload.array('product', 4), async (req, res) => {
     try {
@@ -89,10 +95,26 @@ app.post("/upload", upload.array('product', 4), async (req, res) => {
         const imageUrls = [];
 
         for (const file of req.files) {
-            const result = await cloudinary.uploader.upload(file.path, {
-                folder: "product_images", // Optional Cloudinary folder
-                public_id: `product_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
-            });
+            const streamUpload = () => {
+                return new Promise((resolve, reject) => {
+                    const stream = cloudinary.uploader.upload_stream(
+                        {
+                            folder: "product_images",
+                            public_id: `product_${Date.now()}_${Math.floor(Math.random() * 10000)}`
+                        },
+                        (error, result) => {
+                            if (result) {
+                                resolve(result);
+                            } else {
+                                reject(error);
+                            }
+                        }
+                    );
+                    streamifier.createReadStream(file.buffer).pipe(stream);
+                });
+            };
+
+            const result = await streamUpload();
 
             imageUrls.push({
                 url: result.secure_url,
