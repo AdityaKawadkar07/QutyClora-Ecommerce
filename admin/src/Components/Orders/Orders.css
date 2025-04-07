@@ -224,3 +224,26 @@
     height: 40px;
   }
 }
+.stats {
+  background-color: #f9f9f9;
+  padding: 20px;
+  margin: 40px auto;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.stats h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.stats p {
+  font-size: 18px;
+  margin: 8px 0;
+  color: #555;
+}
+

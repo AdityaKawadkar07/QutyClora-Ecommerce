@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./Orders.css";
+import Statistics from "../Statistics/Statistics";
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+const API_BASE_URL =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
 const Orders = () => {
   // const sampleOrders = [
@@ -40,15 +42,12 @@ const Orders = () => {
 
   const toggleAmountDetails = (orderId) => {
     setExpandedAmount(expandedAmount === orderId ? null : orderId);
-};
-
+  };
 
   // Fetch orders from backend API
   const fetchOrders = async () => {
     try {
-      const res = await fetch(
-        `${API_BASE_URL}/getallorders`
-      );
+      const res = await fetch(`${API_BASE_URL}/getallorders`);
       const data = await res.json();
 
       if (data.success) {
@@ -68,7 +67,7 @@ const Orders = () => {
 
       setAllUsers(data);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error("Error fetching users:", error);
     }
   };
 
@@ -77,25 +76,22 @@ const Orders = () => {
     fetchUsers();
   }, []);
 
-    // Get user name by matching userId
-    const getUserName = (userId) => {
-      const user = allUsers.find((user) => user._id === userId);
-      return user ? user.name : 'Unknown User';
-    };
+  // Get user name by matching userId
+  const getUserName = (userId) => {
+    const user = allUsers.find((user) => user._id === userId);
+    return user ? user.name : "Unknown User";
+  };
 
   // Update order status
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      const res = await fetch(
-        `${API_BASE_URL}/updateorderstatus/${orderId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ status: newStatus }),
-        }
-      );
+      const res = await fetch(`${API_BASE_URL}/updateorderstatus/${orderId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
 
       const data = await res.json();
 
@@ -112,6 +108,7 @@ const Orders = () => {
   };
 
   return (
+    <div>
     <div className="orders">
       <h1>All Orders</h1>
       <div className="orders-header">
@@ -184,22 +181,33 @@ const Orders = () => {
             <p>{order.address.phoneNo}</p>
             <p>{order.items.reduce((acc, item) => acc + item.quantity, 0)}</p>
             <div className="total-amount">
-    <p className="amount-hover" onClick={() => toggleAmountDetails(order._id)}>
-        ₹{order.amount} <span style={{ cursor: "pointer", color: "#007bff" }}>▼</span>
-    </p>
-    {expandedAmount === order._id && (
-        <div className="amount-details">
-            <p><b>Cost Before Discount:</b> ₹{order.amount + order.discount.discount_amount}</p>
-            {order.discount.discount_amount > 0 && (
-                <>
-                    <p><b>Discount:</b> {order.discount.discount_name || "N/A"}</p>
-                    <p><b>Discount Amount:</b> ₹{order.discount.discount_amount}</p>
-                </>
-            )}
-        </div>
-    )}
-</div>
-
+              <p
+                className="amount-hover"
+                onClick={() => toggleAmountDetails(order._id)}
+              >
+                ₹{order.amount}{" "}
+                <span style={{ cursor: "pointer", color: "#007bff" }}>▼</span>
+              </p>
+              {expandedAmount === order._id && (
+                <div className="amount-details">
+                  <p>
+                    <b>Cost Before Discount:</b> ₹
+                    {order.amount + order.discount.discount_amount}
+                  </p>
+                  {order.discount.discount_amount > 0 && (
+                    <>
+                      <p>
+                        <b>Discount:</b> {order.discount.discount_name || "N/A"}
+                      </p>
+                      <p>
+                        <b>Discount Amount:</b> ₹
+                        {order.discount.discount_amount}
+                      </p>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* Payment Receipt Link */}
             <p>
@@ -226,6 +234,10 @@ const Orders = () => {
           </div>
         ))}
       </div>
+    </div>
+    {/* <div className="stats">
+      <Statistics/>
+    </div> */}
     </div>
   );
 };

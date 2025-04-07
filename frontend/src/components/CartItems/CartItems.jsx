@@ -9,9 +9,13 @@ const API_BASE_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
 
 const CartItems = () => {
-  const { getTotalCartAmount, all_product, cartItems, removeFromCart,saveDiscountDetails 
-  } =
-    useContext(ShopContext);
+  const {
+    getTotalCartAmount,
+    all_product,
+    cartItems,
+    removeFromCart,
+    saveDiscountDetails,
+  } = useContext(ShopContext);
   const [showPromoDialog, setShowPromoDialog] = useState(false);
   const [promoCode, setPromoCode] = useState("");
   const [availableCoupons, setAvailableCoupons] = useState([]);
@@ -20,7 +24,7 @@ const CartItems = () => {
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [selectedCoupon, setSelectedCoupon] = useState(null);
   const [isFirstTimeBuyer, setIsFirstTimeBuyer] = useState(false);
-
+  
 
   const navigate = useNavigate();
 
@@ -53,54 +57,56 @@ const CartItems = () => {
     }
   };
 
-// Apply coupon on clicking from dialog
-// Select coupon but don't apply immediately
-const applyCoupon = (coupon) => {
+  // Apply coupon on clicking from dialog
+  // Select coupon but don't apply immediately
+  const applyCoupon = (coupon) => {
     setSelectedCoupon(coupon); // Store selected coupon temporarily
     setPromoCode(coupon.name);
     setShowPromoDialog(false);
-    setCouponMessage('');
+    setCouponMessage("");
   };
 
   useEffect(() => {
     const checkFirstTimeBuyer = async () => {
-      const authToken = localStorage.getItem('auth-token');
+      const authToken = localStorage.getItem("auth-token");
       if (!authToken) return;
-  
+
       try {
         const response = await fetch(`${API_BASE_URL}/getmyorders`, {
           method: "GET",
           headers: {
-            'auth-token': `${authToken}`,
+            "auth-token": `${authToken}`,
           },
         });
-  
+
         const data = await response.json();
-        if (data.success === false && data.message === "No orders found for this user") {
-            setIsFirstTimeBuyer(true); // Mark as first-time buyer
-          } else if (data.success && data.orders.length === 0) {
-            setIsFirstTimeBuyer(true); // Additional fallback (if empty orders array is returned)
-          } else {
-            setIsFirstTimeBuyer(false); // Orders exist or API failed
-          }
+        if (
+          data.success === false &&
+          data.message === "No orders found for this user"
+        ) {
+          setIsFirstTimeBuyer(true); // Mark as first-time buyer
+        } else if (data.success && data.orders.length === 0) {
+          setIsFirstTimeBuyer(true); // Additional fallback (if empty orders array is returned)
+        } else {
+          setIsFirstTimeBuyer(false); // Orders exist or API failed
+        }
       } catch (error) {
         console.error("Error checking first-time buyer status:", error);
       }
     };
-  
+
     checkFirstTimeBuyer();
   }, []);
 
   // Special coupon for first-time buyers
-const firstTimeCoupon = {
+  const firstTimeCoupon = {
     _id: "first-time-coupon",
     name: "WELCOME200",
     description:
       "Flat ₹200 off on orders above ₹500 or 30% off below ₹500 for first-time buyers t&c",
     type: "special",
-    expiry: new Date(new Date().setDate(new Date().getDate() + 7)), // 7 days validity
   };
-  
+
   // Add first-time coupon if applicable
   const getDisplayedCoupons = () => {
     if (isFirstTimeBuyer) {
@@ -113,15 +119,14 @@ const firstTimeCoupon = {
     const subtotal = getTotalCartAmount();
     let isValid = true;
 
-    
-  if (coupon.type === "special" && coupon.name === "WELCOME200") {
-    if (subtotal > 500) {
-      coupon.discount = 200;
-    } else {
-      coupon.discount = (subtotal * 30) / 100;
+    if (coupon.type === "special" && coupon.name === "WELCOME200") {
+      if (subtotal > 500) {
+        coupon.discount = 200;
+      } else {
+        coupon.discount = (subtotal * 30) / 100;
+      }
+      return isValid; // Always valid for first-time coupon
     }
-    return isValid; // Always valid for first-time coupon
-  }
 
     const description = coupon.description.toLowerCase();
     // Check for "flat" or "percentage" discount
@@ -131,16 +136,15 @@ const firstTimeCoupon = {
         coupon.type = "flat";
         coupon.discount = parseInt(match[1]);
       }
-    } 
-    else if (description.includes("%")) {
-        const match = description.match(/(\d+)%/);
-        if (match) {
-          coupon.type = "percentage";
-          const percentage = parseInt(match[1]);
-          coupon.discount = (subtotal * percentage) / 100; // Calculate % of total
-        }
+    } else if (description.includes("%")) {
+      const match = description.match(/(\d+)%/);
+      if (match) {
+        coupon.type = "percentage";
+        const percentage = parseInt(match[1]);
+        coupon.discount = (subtotal * percentage) / 100; // Calculate % of total
       }
-  
+    }
+
     // Check for minimum purchase condition
     if (description.includes("above")) {
       const match = description.match(/above\s*(\d+)/);
@@ -154,19 +158,18 @@ const firstTimeCoupon = {
         }
       }
     }
-  
+
     return isValid;
-  };  
+  };
 
   // Reset applied coupon if cart changes
-useEffect(() => {
+  useEffect(() => {
     if (appliedCoupon) {
       setAppliedCoupon(null);
       setDiscountAmount(0);
       setCouponMessage("⚠️ Coupon removed due to cart modification.");
     }
   }, [cartItems]);
-
 
   const handleCouponSubmit = () => {
     if (selectedCoupon && selectedCoupon.name === promoCode) {
@@ -177,10 +180,12 @@ useEffect(() => {
         saveDiscountDetails(selectedCoupon.name, selectedCoupon.discount);
         setDiscountAmount(selectedCoupon.discount);
         setAppliedCoupon(selectedCoupon);
-        setCouponMessage(`🎉 WELCOME200 Applied! You saved ₹${selectedCoupon.discount}`);
+        setCouponMessage(
+          `🎉 WELCOME200 Applied! You saved ₹${selectedCoupon.discount}`
+        );
         return;
       }
-  
+
       // Regular coupon logic
       if (validateCouponCondition(selectedCoupon)) {
         calculateDiscount(selectedCoupon); // Correct discount calculation
@@ -195,24 +200,21 @@ useEffect(() => {
       setCouponMessage("❌ Invalid coupon or expired.");
     }
   };
-  
-  
 
   // Calculate Discount Logic
-const calculateDiscount = (coupon) => {
-  const subtotal = getTotalCartAmount();
-  let discount = 0;
+  const calculateDiscount = (coupon) => {
+    const subtotal = getTotalCartAmount();
+    let discount = 0;
 
-  if (coupon.type === "percentage") {
-    discount = (subtotal * coupon.discount) / 100;
-  } else if (coupon.type === "flat") {
-    discount = coupon.discount;
-  }
+    if (coupon.type === "percentage") {
+      discount = (subtotal * coupon.discount) / 100;
+    } else if (coupon.type === "flat") {
+      discount = coupon.discount;
+    }
 
-  setDiscountAmount(discount);
-  setAppliedCoupon(coupon);
-};
-
+    setDiscountAmount(discount);
+    setAppliedCoupon(coupon);
+  };
 
   const getFinalAmount = () => {
     const subtotal = getTotalCartAmount();
@@ -221,7 +223,6 @@ const calculateDiscount = (coupon) => {
     }
     return subtotal.toFixed(2);
   };
-  
 
   return (
     <div className="cartitems">
@@ -282,11 +283,9 @@ const calculateDiscount = (coupon) => {
             {appliedCoupon && (
               <>
                 <div className="cartitems-total-item discount-row">
-                  <p>
-                    {appliedCoupon.name}{" "}
-                  </p>
+                  <p>{appliedCoupon.name} </p>
                   <p style={{ color: "green" }}>
-                      (₹{appliedCoupon.discount} Off)
+                    (₹{appliedCoupon.discount} Off)
                   </p>
                 </div>
                 <hr />
@@ -333,27 +332,36 @@ const calculateDiscount = (coupon) => {
           <div className="promo-dialog-content">
             <h2>Select a Promo Code</h2>
             <div className="promo-list">
-            {getDisplayedCoupons().length > 0 ? (
-          getDisplayedCoupons().map((coupon) => (
-            <div
-              key={coupon._id}
-              className="promo-item"
-              onClick={() => applyCoupon(coupon)}
-            >
-              <FaGift size={30} color="red" />
-              <div className="promo-item-content">
-                <h3>{coupon.name}</h3>
-                <p>{coupon.description}</p>
-                <p>
-                  🕒 Valid Till:{" "}
-                  {new Date(coupon.expiry).toLocaleDateString()}
-                </p>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>No available coupons found.</p>
+            {getDisplayedCoupons().map((coupon) => {
+  const isExpired = coupon.expiry && new Date(coupon.expiry) < new Date();
+  return (
+    <div
+      key={coupon._id}
+      className={`promo-item ${isExpired ? "expired-coupon" : ""}`}
+      onClick={() => {
+        if (!isExpired) applyCoupon(coupon);
+      }}
+      style={{ cursor: isExpired ? "not-allowed" : "pointer", opacity: isExpired ? 0.6 : 1 }}
+    >
+      <FaGift size={30} color={isExpired ? "gray" : "red"} />
+      <div className="promo-item-content">
+        <h3>{coupon.name}</h3>
+        <p>{coupon.description}</p>
+        {coupon.name !== "WELCOME200" && (
+          <p>
+            Valid Till: {new Date(coupon.expiry).toLocaleDateString()}
+            {isExpired && (
+              <span style={{ color: "red", marginLeft: "10px" }}>
+                (Expired)
+              </span>
+            )}
+          </p>
         )}
+      </div>
+    </div>
+  );
+})}
+
             </div>
             {/* <button
               className="close-btn"

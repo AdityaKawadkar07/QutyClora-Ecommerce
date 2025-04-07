@@ -547,10 +547,27 @@ app.post('/placeorder', upload.single('paymentSS'), fetchUser, async (req, res) 
         }
 
         // Upload paymentSS to Cloudinary
-        const cloudinaryUpload = await cloudinary.uploader.upload(req.file.path, {
-            folder: 'payment_screenshots', // Upload to this folder in Cloudinary
-            public_id: `payment_${Date.now()}`
-        });
+        const streamUpload = () => {
+            return new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    {
+                        folder: "payment_screenshots",
+                        public_id: `payment_${Date.now()}`,
+                    },
+                    (error, result) => {
+                        if (result) {
+                            resolve(result);
+                        } else {
+                            reject(error);
+                        }
+                    }
+                );
+                streamifier.createReadStream(req.file.buffer).pipe(stream);
+            });
+        };
+        
+        const cloudinaryUpload = await streamUpload();
+        
 
         if (!cloudinaryUpload.secure_url) {
             return res.status(500).json({ success: false, message: "Failed to upload payment screenshot" });
