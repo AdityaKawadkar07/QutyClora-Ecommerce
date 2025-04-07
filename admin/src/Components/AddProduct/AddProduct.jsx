@@ -6,6 +6,7 @@ const API_BASE_URL=import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
 const AddProduct = () => {
     const [images, setImages] = useState([null, null, null, null]);
+    const [loading,setLoading] = useState(false);
     const [productDetails, setProductDetails] = useState({
         name: "",
         images: [],
@@ -29,6 +30,7 @@ const AddProduct = () => {
     }
 
     const Add_Product = async () => {
+        setLoading(true);
         console.log("Submitting Product:", productDetails);
     
         let formData = new FormData();
@@ -54,6 +56,7 @@ const AddProduct = () => {
     
             if (!responseData.success || !responseData.images) {
                 alert('Image upload failed.');
+                setLoading(false);
                 return;
             }
     
@@ -99,6 +102,8 @@ const AddProduct = () => {
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred. Please try again.');
+        }finally{
+            setLoading(false);
         }
     };
     
@@ -145,7 +150,9 @@ const AddProduct = () => {
                 ))}
             </div>
 
-            <button onClick={()=>{Add_Product()}} className='addproduct-btn' disabled={!productDetails.name || !productDetails.old_price || !productDetails.new_price || !productDetails.description}>ADD</button>
+            <button onClick={()=>{Add_Product()}} className='addproduct-btn' disabled={!productDetails.name || !productDetails.old_price || !productDetails.new_price || !productDetails.description || loading}>
+            {loading ? <span className="loader"></span> : "ADD"}
+            </button>
         </div>
     )
 }

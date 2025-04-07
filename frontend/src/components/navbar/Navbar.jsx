@@ -2,12 +2,14 @@ import React, { useContext, useRef, useState, useEffect } from 'react'
 import './Navbar.css'
 import logo from '../assets/logo.png'
 import cart_icon from '../assets/cart_icon.png'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { ShopContext } from '../../context/ShopContext'
 import nav_dropdown from '../assets/dropdown_icon.png'
 
 const Navbar = () => {
-  const [menu, setMenu] = useState('home')
+  const location  = useLocation();
+  const path = location.pathname.split('/')[1];
+  const [menu, setMenu] = useState(path || 'home')
   const { getTotalCartItems } = useContext(ShopContext)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const menuRef = useRef();

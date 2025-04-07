@@ -9,12 +9,14 @@ import crypto from 'crypto';
 import sendEmail from './helpers/sendEmail.js';
 import cloudinary from 'cloudinary'
 import cron from 'node-cron'
+import {CloudinaryStorage} from 'multer-storage-cloudinary';
 
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
 
 const SECRET_KEY = process.env.JWT_SECRET;
+
 
 
 const ADMIN_EMAIL = "adityakawadkar7@gmail.com";
@@ -45,6 +47,18 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_SECRET_KEY,
 });
 
+
+// // Cloudinary storage setup for product images
+// const productStorage = new CloudinaryStorage({
+//     cloudinary: cloudinary,
+//     params: {
+//       folder: 'product_images', // you can customize this folder
+//       allowed_formats: ['jpg', 'jpeg', 'png'],
+//     },
+//   });
+
+//   const productUpload = multer({ storage: productStorage });
+
 // Image Storage Engine with unique filenames
 const storage = multer.diskStorage({
     destination: "./upload/images",
@@ -62,7 +76,7 @@ const upload = multer({
 // Creating Upload Endpoint for Images
 app.use('/images', express.static('upload/images'));
 
-app.post("/upload", upload.array('product', 4), (req, res) => {
+app.post("/upload", upload.array('product', 4), async (req, res) => {
     try {
         if (!req.files || req.files.length === 0) {
             return res.status(400).json({
@@ -71,26 +85,38 @@ app.post("/upload", upload.array('product', 4), (req, res) => {
             });
         }
 
-        const imageUrls = req.files.map(file => ({
-            url: `/images/${file.filename}`,
-            filename: file.filename,
-            size: file.size
-        }));
-        console.log(imageUrls);
+        // Upload all files to Cloudinary one by one
+        const imageUrls = [];
+
+        for (const file of req.files) {
+            const result = await cloudinary.uploader.upload(file.path, {
+                folder: "product_images", // Optional Cloudinary folder
+                public_id: `product_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
+            });
+
+            imageUrls.push({
+                url: result.secure_url,
+                filename: result.public_id,
+                size: file.size,
+            });
+        }
 
         res.json({
             success: 1,
             message: 'Files uploaded successfully',
-            images: imageUrls
+            images: imageUrls,
         });
+
     } catch (error) {
-        console.error('Error uploading files:', error);
+        console.error('Error uploading files to Cloudinary:', error);
         res.status(500).json({
             success: 0,
-            message: 'Error uploading files'
+            message: 'Error uploading files to Cloudinary'
         });
     }
 });
+
+  
 
 //Schema for Creating Products
 const Product = mongoose.model("Product",{
