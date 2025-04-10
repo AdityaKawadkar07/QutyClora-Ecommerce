@@ -1,0 +1,68 @@
+.statistics-container {
+    padding: 2rem;
+    background-color: #f9f9ff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    margin: 2rem auto;
+  }
+  
+  .stats-heading {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .stats-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+  }
+  
+  .stat-card {
+    flex: 1 1 250px;              /* smaller base width */
+    padding: 1.2rem 1.5rem;       /* less padding for compactness */
+    border-radius: 0.75rem;
+    text-align: center;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06); /* slightly subtler shadow */
+    transition: transform 0.3s ease;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-4px);  /* slightly less jump on hover */
+  }
+  
+  .stat-number {
+    font-size: 2rem;              /* reduced from 2.5rem */
+    font-weight: bold;
+    color: #111;
+    margin-top: 0.5rem;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .orders-card {
+    border-top: 5px solid #007bff;
+  }
+  
+  .revenue-card {
+    border-top: 5px solid #28a745;
+  }
+  
+  /* Responsive */
+  @media screen and (max-width: 600px) {
+    .stat-card {
+      flex: 1 1 100%;
+    }
+  
+    .stats-heading {
+      font-size: 1.5rem;
+    }
+  
+    .stat-number {
+      font-size: 2rem;
+    }
+  }
+  

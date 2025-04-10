@@ -1,0 +1,29 @@
+.gender-chart-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    margin-top: 40px;
+  }
+  
+  .gender-chart-card h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  @media (max-width: 600px) {
+    .gender-chart-card {
+      padding: 15px;
+    }
+  
+    .gender-chart-card h3 {
+      font-size: 18px;
+    }
+  }
+  

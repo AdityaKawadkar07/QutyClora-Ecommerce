@@ -1,0 +1,44 @@
+.orders-heatmap-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    margin-top: 2rem;
+    width: 100%;
+    overflow-x: auto;
+    position: relative;
+  }
+  
+  .heatmap-header {
+    margin-bottom: 1rem;
+  }
+  
+  .heatmap-header h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .heatmap-tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    pointer-events: none;
+    display: none;
+    z-index: 10;
+  }
+  
+  /* Responsive */
+  @media screen and (max-width: 768px) {
+    .orders-heatmap-container {
+      padding: 1.5rem;
+    }
+  
+    .heatmap-header h3 {
+      font-size: 1.2rem;
+    }
+  }
+  

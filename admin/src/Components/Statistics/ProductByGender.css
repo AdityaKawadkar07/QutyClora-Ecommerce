@@ -1,0 +1,35 @@
+.product-by-gender-container {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    margin-top: 40px;
+  }
+  
+  .graph-header {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .graph-header h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  /* Responsive tweak */
+  @media (max-width: 768px) {
+    .product-by-gender-container {
+      padding: 0.5rem;
+    }
+  
+    .graph-header h3 {
+      font-size: 1.2rem;
+    }
+  }
+  

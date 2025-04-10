@@ -6,32 +6,6 @@ const API_BASE_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
 const Orders = () => {
-  // const sampleOrders = [
-  //   {
-  //     orderId: "ORD1001",
-  //     items: [
-  //       { name: "Product A", quantity: 2 },
-  //       { name: "Product B", quantity: 1 },
-  //     ],
-  //     userName: "John Doe",
-  //     address: "123 Main St, City, Some Landmark, Near XYZ",
-  //     contact: "9876543210",
-  //     totalItems: 3,
-  //     totalAmount: 2499,
-  //   },
-  //   {
-  //     orderId: "ORD1002",
-  //     items: [
-  //       { name: "Product C", quantity: 1 },
-  //       { name: "Product D", quantity: 2 },
-  //     ],
-  //     userName: "Jane Smith",
-  //     address: "456 Elm St, Town, Apartment 12B, Near ABC Mall",
-  //     contact: "9876543211",
-  //     totalItems: 3,
-  //     totalAmount: 1599,
-  //   },
-  // ];
 
   const [orders, setOrders] = useState([]);
 
@@ -235,9 +209,9 @@ const Orders = () => {
         ))}
       </div>
     </div>
-    {/* <div className="stats">
+    <div className="stats">
       <Statistics/>
-    </div> */}
+    </div>
     </div>
   );
 };

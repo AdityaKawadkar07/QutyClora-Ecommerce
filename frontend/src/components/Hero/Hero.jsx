@@ -3,9 +3,11 @@ import "./Hero.css";
 import hero_image from "../assets/hero_image.png";
 import hand_icon from '../assets/hand_icon.png';
 import arrow_icon from '../assets/arrow.png'
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
   const [animate, setAnimate] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
@@ -28,7 +30,7 @@ const Hero = () => {
           {/* <img src={hand_icon} alt="Sparkle Icon" /> */}
         </div>
 
-        <div className="hero-shop-btn">
+        <div className="hero-shop-btn" onClick={()=>navigate('/shop')}>
           <span>Shop Now</span>
           <img src={arrow_icon} alt="Arrow Icon" />
         </div>
