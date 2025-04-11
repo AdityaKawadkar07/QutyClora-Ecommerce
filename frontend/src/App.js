@@ -16,6 +16,7 @@ import Forgot from './pages/Forgot';
 import ResetPasswordPage from './pages/ResetPassword';
 import MyOrder from './pages/MyOrder';
 import FloatingButton from './components/FloatingButton/FloatingButton';
+import 'quill/dist/quill.snow.css';
 
 function App() {
   return (

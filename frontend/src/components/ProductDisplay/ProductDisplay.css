@@ -91,6 +91,130 @@
     cursor: pointer;
 }
 
+.productdisplay-right-stars {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 10px 0;
+    position: relative;
+    cursor: default;
+  }
+  
+  .productdisplay-right-stars p {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+  }
+  
+  .productdisplay-right-stars-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .productdisplay-right-stars {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 10px 0;
+    position: relative;
+    cursor: default;
+  }
+  
+  .productdisplay-right-stars p {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+  }
+  
+  /* Tooltip styling */
+  .rating-tooltip {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    position: absolute;
+    top: -28px;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
+  }
+  
+  /* Show tooltip on hover */
+  .productdisplay-right-stars:hover .rating-tooltip {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  /* Star fill */
+  .star-wrapper {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    background-image: url('../assets/star_dull_icon.png');
+    background-size: cover;
+  }
+  
+  .star-filled {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-image: url('../assets/star_icon.png');
+    background-size: cover;
+    overflow: hidden;
+    z-index: 2;
+  }
+  
+  .star-empty {
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/star_dull_icon.png');
+    background-size: cover;
+    z-index: 1;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .productdisplay-right-stars {
+      gap: 4px;
+    }
+  
+    .star-wrapper {
+      width: 20px;
+      height: 20px;
+    }
+  
+    .productdisplay-right-stars p {
+      font-size: 12px;
+    }
+  
+    .rating-tooltip {
+      font-size: 12px;
+      top: -24px;
+    }
+  }
+  
+  
+  @media screen and (max-width: 600px) {
+    .productdisplay-right-stars {
+      gap: 4px;
+    }
+  
+    .star-wrapper {
+      width: 20px;
+      height: 20px;
+    }
+  
+    .productdisplay-right-stars p {
+      font-size: 12px;
+    }
+  }
+  
+
 @media(max-width:1280px){
     .productdisplay{
         margin: 0px 60px;

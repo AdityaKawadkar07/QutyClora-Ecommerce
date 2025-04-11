@@ -1,5 +1,6 @@
 .descriptionbox{
-    margin: 120px 170px;
+    margin: 0px 170px;
+    margin-bottom: 20px;
 }
 .descriptionbox-navigator{
     display: flex;
@@ -18,7 +19,7 @@
     background: #fbfbfb;
     color: #555;
 }
-.descriptionbox-descritpion{
+.descriptionbox-description{
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -37,5 +38,27 @@
     }
     .descriptionbox-descritpion{
         font-size: 14px;
+    }
+}
+.descriptionbox-description,
+.descriptionbox-reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  border: 1px solid #d0d0d0;
+  padding: 48px;
+  padding-bottom: 70px;
+}
+
+.descriptionbox-nav-box {
+  cursor: pointer;
+}
+
+
+@media (max-width: 800px) {
+    .descriptionbox-description,
+    .descriptionbox-reviews {
+        font-size: 14px;
+        padding: 24px;
     }
 }

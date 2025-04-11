@@ -1,0 +1,190 @@
+.reviews-container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    border: 1px solid #f0f0f0;
+    padding: 48px;
+    padding-bottom: 70px;
+    background-color: #fff;
+    border-radius: 12px;
+    max-width: 100%; /* Full width by default */
+    width: 100%; /* Full width on large screens */
+    margin: 0 auto;
+    box-sizing: border-box; /* Ensures padding does not affect width */
+}
+
+.review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 300px;
+}
+
+.star-rating .star {
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.review-name {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+}
+
+.review-textarea {
+    height: 100px;
+}
+
+.review-upload-label {
+    background-color: #ffeef0;
+    padding: 10px 14px;
+    width: fit-content;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.3s ease;
+}
+
+.review-upload-label:hover {
+    background-color: #ffd6da;
+}
+
+.review-preview-img {
+    max-width: 120px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.review-submit {
+    padding: 10px 18px;
+    background-color: #ff4141;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
+    width: fit-content;
+}
+
+.review-submit:hover {
+    background-color: #e6315d;
+}
+
+.divider {
+    border-top: 1px solid #eee;
+    margin: 30px 0;
+}
+
+.all-reviews {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-height: 380px; /* Adjust to show 2-3 reviews */
+    overflow-y: auto; /* Allow scrolling only when there are more than 3 reviews */
+    padding-right: 10px;  /* Only make the reviews scrollable when more than 3 reviews */
+}
+
+.review-card {
+    border: 1px solid #f0f0f0;
+    padding: 16px;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04);
+    /* Remove min-height to allow dynamic height */
+    /* Allow the card height to grow     with content */
+    display: flex;
+    flex-direction: column;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.review-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.review-date {
+    font-size: 12px;
+    color: #777;
+}
+
+.review-text {
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.review-image {
+    margin-top: 10px;
+    max-width: 120px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+@media (max-width: 1280px) {
+    .reviews-container {
+        padding: 24px;
+        max-width: 80%; /* 80% width on medium screens */
+    }
+
+    .review-form, .all-reviews {
+        font-size: 14px;
+    }
+
+    .review-image, .review-preview-img {
+        max-width: 100px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .reviews-container {
+        padding: 16px;
+        max-width: 70%; /* 70% width on smaller screens */
+    }
+
+    .review-submit {
+        padding: 8px 14px;
+        font-size: 14px;
+    }
+
+    .review-image {
+        max-width: 90px;
+    }
+}
+
+@media (max-width: 800px) {
+    .all-reviews {
+        max-height: none; /* Limit the container height */
+        overflow-y: auto;  /* Allow scrolling when content exceeds the height */
+        padding-right: 10px;  /* Keep scroll functionality */
+    }
+
+    .review-card {
+        /* Remove the restriction on individual review card height */
+        height: auto; /* Allow dynamic height for each card */
+    }
+}
+
+@media (max-width: 480px) {
+    .reviews-container {
+        padding: 10px;
+        max-width: 100%; /* Full width on very small screens */
+    }
+
+    .review-submit {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .review-image {
+        max-width: 80px;
+    }
+}

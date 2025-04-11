@@ -171,7 +171,38 @@ const Product = mongoose.model("Product",{
     },
     description:{
         type:String,
-    }
+    },
+    reviews: [
+        {
+            userId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+                required: false,
+            },
+            name: {
+                type: String,
+                default: "Anonymous",
+            },
+            rating: {
+                type: Number,
+                required: true,
+                min: 1,
+                max: 5,
+            },
+            comment: {
+                type: String,
+                required: true,
+            },
+            images: {
+                type: [String], // URLs to images (uploaded to Cloudinary or similar)
+                default: [],
+            },
+            date: {
+                type: Date,
+                default: Date.now,
+            },
+        }
+    ]
 });
 
 app.post('/addproduct',async(req,res)=>{
@@ -224,6 +255,8 @@ app.get('/allproducts',async (req,res)=>{
     console.log("All Products Fetched");
     res.send(products);
 });
+
+
 
 //Schema creating for User model
 const Users = mongoose.model('Users',{
@@ -449,6 +482,90 @@ app.post('/getcart',fetchUser,async(req,res)=>{
     let userData = await Users.findOne({_id:req.user.id});
     res.json(userData.cartData);
 });
+
+//Creating API for adding reviews
+app.post("/add-review/:productId", fetchUser, upload.array("images", 3), async (req, res) => {
+    const { name, rating, comment } = req.body;
+    const { files } = req;
+
+    try {
+        // Validation
+        if (!rating || !comment) {
+            return res.status(400).json({ message: "Rating and comment are required" });
+        }
+        if (rating < 1 || rating > 5) {
+            return res.status(400).json({ message: "Rating must be between 1 and 5" });
+        }
+
+        // Upload image buffers to Cloudinary
+        const imageUrls = [];
+
+        if (files && files.length > 0) {
+            const uploadPromises = files.map((file) => {
+                return new Promise((resolve, reject) => {
+                    cloudinary.uploader.upload_stream(
+                        { resource_type: "image", folder: "review_images" },
+                        (error, result) => {
+                            if (error) {
+                                console.log("Cloudinary upload error:", error);
+                                reject(error);
+                            } else {
+                                imageUrls.push(result.secure_url);
+                                resolve();
+                            }
+                        }
+                    ).end(file.buffer); // Use .end with buffer instead of .pipe
+                });
+            });
+
+            await Promise.all(uploadPromises);
+        }
+
+        // Find product
+        const product = await Product.findById(req.params.productId);
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        // Create and push new review
+        const newReview = {
+            userId: req.user.id,
+            name: name || "Anonymous",
+            rating,
+            comment,
+            images: imageUrls,
+            date: new Date()
+        };
+
+        product.reviews.push(newReview);
+        await product.save();
+
+        res.status(200).json({ message: "Review added successfully", product });
+    } catch (error) {
+        console.error("Review Error:", error);
+        res.status(500).json({ message: "Error adding review", error });
+    }
+});
+
+//Creating API for getting reviews of a product
+app.get('/get-reviews/:productId', async (req, res) => {
+    try {
+      const productId = req.params.productId;
+  
+      const product = await Product.findById(productId);
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+  
+      // Return only reviews array
+      res.status(200).json({ reviews: product.reviews });
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+      res.status(500).json({ message: 'Error fetching reviews', error });
+    }
+  });
+  
+
 
 //Creating schema for Order
 const Orders = mongoose.model('Orders', {
