@@ -18,6 +18,7 @@
     max-width: 100%;
     min-width: 120px; /* Prevent shrinking below 120px */
     transition: all 0.3s ease;
+    cursor: pointer;
   }
   
   /* Medium Screens */

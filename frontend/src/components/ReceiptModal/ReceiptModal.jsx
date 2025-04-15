@@ -19,16 +19,21 @@ const ReceiptModal = ({ order, onClose }) => {
 //   };
 
 const downloadReceipt = () => {
-    const input = receiptRef.current;
-    html2canvas(input, { scale: 2 }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);
-      pdf.save(`QutyClora_Receipt_${order.orderId}.pdf`);
-    });
-  };
+  const input = receiptRef.current;
+  html2canvas(input, { scale: 2 }).then((canvas) => {
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const margin = 10; // 🔸 Set your desired horizontal margin here (in mm)
+    const usableWidth = pageWidth - margin * 2;
+
+    const imgHeight = (canvas.height * usableWidth) / canvas.width;
+
+    pdf.addImage(imgData, 'PNG', margin, 10, usableWidth, imgHeight); // X position set to `margin`
+    pdf.save(`QutyClora_Receipt_${order.orderId}.pdf`);
+  });
+};
 
   const totalAmount = order.amount + order.discount.discount_amount;
 

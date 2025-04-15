@@ -2,11 +2,12 @@ import React, { useContext, useRef, useState, useEffect } from 'react'
 import './Navbar.css'
 import logo from '../assets/logo.png'
 import cart_icon from '../assets/cart_icon.png'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ShopContext } from '../../context/ShopContext'
 import nav_dropdown from '../assets/dropdown_icon.png'
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const location  = useLocation();
   const path = location.pathname.split('/')[1];
   const [menu, setMenu] = useState(path || 'home')
@@ -80,7 +81,7 @@ const handleMenuClick = (selectedMenu) => {
   return (
     <div className='navbar'>
       <div className='nav-logo'>
-        <img src={logo} alt='Logo' />
+        <img src={logo} alt='Logo' onClick={()=>navigate('/')} />
       </div>
       <img className='nav-dropdown' src={nav_dropdown} onClick={dropdown_toggle} alt='Dropdown' />
       <ul ref={menuRef} className='nav-menu'>

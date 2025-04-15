@@ -137,5 +137,80 @@
     max-height: 80vh;
     overflow-y: auto;
   }
+  /* Medium screens: Tablets and small laptops */
+@media (max-width: 800px) {
+  .receipt-modal {
+    width: 90%;
+    padding: 16px;
+    border-radius: 10px;
+  }
+
+  .receipt-table th,
+  .receipt-table td {
+    font-size: 13px;
+    padding: 6px;
+  }
+
+  .receipt-summary,
+  .receipt-customer-info p {
+    font-size: 13px;
+  }
+
+  .receipt-download-btn {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  .receipt-close-btn {
+    font-size: 13px;
+    padding: 6px 16px;
+  }
+}
+
+/* Small screens: Mobile devices */
+@media (max-width: 500px) {
+  .receipt-modal {
+    width: 95%;
+    padding: 14px;
+    border-radius: 8px;
+  }
+
+  .receipt-header h2 {
+    font-size: 20px;
+  }
+
+  .receipt-header p,
+  .receipt-customer-info p,
+  .receipt-summary p {
+    font-size: 12px;
+  }
+
+  .receipt-table th,
+  .receipt-table td {
+    font-size: 12px;
+    padding: 5px;
+  }
+
+  .receipt-total {
+    font-size: 14px;
+  }
+
+  .receipt-download-btn {
+    font-size: 12px;
+    padding: 5px 8px;
+    top: 8px;
+    right: 8px;
+  }
+
+  .receipt-close-btn {
+    font-size: 12px;
+    padding: 6px 14px;
+  }
+
+  .receipt-img-container img {
+    max-height: 200px;
+  }
+}
+
   
   
