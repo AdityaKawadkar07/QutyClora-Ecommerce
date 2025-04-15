@@ -41,7 +41,17 @@ const Navbar = () => {
       }
     }
     verifyToken()
-  }, [])
+
+      // 👇 Add this block to sync active menu with route
+  const currentPath = location.pathname.split('/')[1];
+  if (currentPath === '') {
+    setMenu('home');
+  } else if (currentPath === 'contactus') {
+    setMenu('contact');
+  } else {
+    setMenu(currentPath);
+  }
+  }, [location.pathname])
 
 // Toggle dropdown menu
 const dropdown_toggle = (e) => {

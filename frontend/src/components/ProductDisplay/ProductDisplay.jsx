@@ -110,7 +110,7 @@ const ProductDisplay = (props) => {
                 </div>
                 {/* Add to Cart Button */}
                 <button 
-                    className='produtctdisplay-addtocart' 
+                    className='productdisplay-addtocart' 
                     onClick={() => {
                         const token = localStorage.getItem('auth-token');
                         if (!token) {
