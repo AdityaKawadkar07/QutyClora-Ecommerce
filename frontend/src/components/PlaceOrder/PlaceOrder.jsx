@@ -1,17 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import './PlaceOrder.css';
 import { ShopContext } from '../../context/ShopContext';
 import { useNavigate } from 'react-router-dom';
-import qr from '../../components/assets/QR_code.jpg';
 
 const PlaceOrder = () => {
     const { getTotalCartAmount, cartItems, all_product, discountDetails } = useContext(ShopContext);
-    console.log(discountDetails.discount_name);  // Coupon name
-    console.log(discountDetails.discount_amount);  // Discount amount
-    const [showModal, setShowModal] = useState(false);
-    const [paymentProof, setPaymentProof] = useState(null);
-    const [timeLeft, setTimeLeft] = useState(300); // 5 minutes countdown
-    const [loading, setLoading] = useState(false); // Added loading state
+    const [loading, setLoading] = useState(false);
     const [address, setAddress] = useState({
         firstName: '',
         lastName: '',
@@ -25,196 +19,158 @@ const PlaceOrder = () => {
 
     const navigate = useNavigate();
 
-    // Handle input change
     const handleInputChange = (e) => {
         setAddress({ ...address, [e.target.name]: e.target.value });
     };
 
-    // Handle file upload
-    const handleFileUpload = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setPaymentProof(file);
-        }
-    };
-
-    // Extract cart items
     const formattedCartItems = Object.keys(cartItems)
         .filter((productId) => cartItems[productId] > 0)
         .map((productId) => {
             const product = all_product.find((p) => p.id === parseInt(productId));
-            return product
-                ? {
-                      name: product.name,
-                      quantity: cartItems[productId],
-                  }
-                : null;
+            return product ? { name: product.name, quantity: cartItems[productId] } : null;
         })
         .filter(Boolean);
 
-    // Handle order submission
     const handlePlaceOrder = async () => {
-        console.log('Formatted Cart Items:', formattedCartItems);
         if (formattedCartItems.length === 0) {
             alert('No items in the cart.');
             return;
         }
-        if (
-            !address.firstName.trim() ||
-            !address.lastName.trim() ||
-            !address.street.trim() ||
-            !address.city.trim() ||
-            !address.state.trim() ||
-            !address.pinCode.trim() ||
-            !address.country.trim() ||
-            !address.phoneNo.trim()
-        ) {
-            alert('Please fill out all delivery details and phone number.');
+
+        const { firstName, lastName, street, city, state, pinCode, country, phoneNo } = address;
+        if (!firstName || !lastName || !street || !city || !state || !pinCode || !country || !phoneNo) {
+            alert('Please fill all delivery details.');
             return;
         }
 
-        setLoading(true); // Start loading
-
-        const finalAmount = Math.max(getTotalCartAmount() - (discountDetails.discount_amount || 0), 0); // Ensure non-negative value
-
-        const formData = new FormData();
-        formData.append(
-            'data',
-            JSON.stringify({
-                items: formattedCartItems,
-                amount: finalAmount,
-                discount_name: discountDetails.discount_name, // Append discount name directly
-                discount_amount: discountDetails.discount_amount, // Append discount amount directly
-                address: {
-                    addressLine: `${address.firstName} ${address.lastName}, ${address.street}, ${address.city}, ${address.state}, ${address.pinCode}, ${address.country}`,
-                    phoneNo: address.phoneNo,
-                },
-            })
-        );
-
-        if (paymentProof) {
-            formData.append('paymentSS', paymentProof);
-        }
+        const finalAmount = Math.max(getTotalCartAmount() - (discountDetails.discount_amount || 0), 0);
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/placeorder`, {
+            setLoading(true);
+            // Step 1: Create Razorpay order
+            const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/create-razorpay-order`, {
                 method: 'POST',
                 headers: {
-                    'auth-token': `${localStorage.getItem('auth-token')}`,
+                    'Content-Type': 'application/json',
+                    'auth-token': localStorage.getItem('auth-token'),
                 },
-                body: formData,
+                body: JSON.stringify({ amount: finalAmount }),
             });
 
-            const data = await response.json();
-            if (data.success) {
-                alert('Order placed successfully!');
-                navigate(`/my-order/${localStorage.getItem('user-id')}`);
-            } else {
-                alert(data.message);
+            const data = await res.json();
+            if (!data.success) {
+                throw new Error(data.message || 'Failed to create Razorpay order');
             }
+
+            const options = {
+                key: process.env.REACT_APP_RAZORPAY_KEY,
+                amount: data.amount,
+                currency: data.currency,
+                name: 'MyShop',
+                description: 'Order Payment',
+                order_id: data.orderId,
+                handler: async function (response) {
+                    const payload = {
+                        items: formattedCartItems,
+                        amount: finalAmount,
+                        discount_name: discountDetails.discount_name || '',
+                        discount_amount: discountDetails.discount_amount || 0,
+                        address: {
+                            addressLine: `${firstName} ${lastName}, ${street}, ${city}, ${state}, ${pinCode}, ${country}`,
+                            phoneNo,
+                        },
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature,
+                    };
+
+                    const placeRes = await fetch(`${process.env.REACT_APP_BACKEND_URL}/placeorder`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'auth-token': localStorage.getItem('auth-token'),
+                        },
+                        body: JSON.stringify(payload),
+                    });
+
+                    const placeData = await placeRes.json();
+                    if (placeData.success) {
+                        alert('Order placed successfully!');
+                        navigate(`/my-order/${localStorage.getItem('user-id')}`);
+                    } else {
+                        alert(placeData.message || 'Order placement failed.');
+                    }
+                },
+                prefill: {
+                    name: `${firstName} ${lastName}`,
+                    email: '', // Optional
+                    contact: phoneNo,
+                },
+                theme: {
+                    color: '#3399cc',
+                },
+            };
+
+            const razorpay = new window.Razorpay(options);
+            razorpay.open();
         } catch (error) {
-            console.error('Error placing order:', error);
-            alert('Something went wrong. Please try again.');
+            console.error('Payment Error:', error);
+            alert(error.message || 'Something went wrong. Please try again.');
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false);
         }
     };
 
-    // Countdown effect
-    useEffect(() => {
-        let timer;
-        if (showModal && timeLeft > 0) {
-            timer = setInterval(() => {
-                setTimeLeft((prevTime) => prevTime - 1);
-            }, 1000);
-        } else if (timeLeft === 0) {
-            setShowModal(false);
-        }
-
-        return () => clearInterval(timer);
-    }, [showModal, timeLeft]);
-
     return (
-        <>
-            <form className="place-order">
-                <div className="place-order-left">
-                    <p className="title">Delivery Information</p>
-                    <div className="multi-fields">
-                        <input type="text" name="firstName" placeholder="First Name" onChange={handleInputChange} />
-                        <input type="text" name="lastName" placeholder="Last Name" onChange={handleInputChange} />
-                    </div>
-                    <input type="email" name="email" placeholder="Email address" onChange={handleInputChange} />
-                    <input type="text" name="street" placeholder="Street" onChange={handleInputChange} />
-                    <div className="multi-fields">
-                        <input type="text" name="city" placeholder="City" onChange={handleInputChange} />
-                        <input type="text" name="state" placeholder="State" onChange={handleInputChange} />
-                    </div>
-                    <div className="multi-fields">
-                        <input type="text" name="pinCode" placeholder="Pin Code" onChange={handleInputChange} />
-                        <input type="text" name="country" placeholder="Country" onChange={handleInputChange} />
-                    </div>
-                    <input type="text" name="phoneNo" placeholder="Phone" onChange={handleInputChange} />
+        <form className="place-order">
+            <div className="place-order-left">
+                <p className="title">Delivery Information</p>
+                <div className="multi-fields">
+                    <input type="text" name="firstName" placeholder="First Name" onChange={handleInputChange} />
+                    <input type="text" name="lastName" placeholder="Last Name" onChange={handleInputChange} />
                 </div>
-                <div className="place-order-right">
-                    <div className="cart-total">
-                        <h2>Cart Totals</h2>
-                        <div>
-                            <div className="cart-total-details">
-                                <p>Subtotal:</p>
-                                <p>₹{getTotalCartAmount()}</p>
-                            </div>
-                            <hr />
-                            <div className="cart-total-details">
-                                <p>Delivery Fee:</p>
-                                <p>₹0.00</p>
-                            </div>
-                            <hr />
-                            <div className="cart-total-details discount">
-                                <p>Discount:</p>
-                                <p>-₹{discountDetails.discount_amount}</p>
-                            </div>
-                            <hr />
-                            <div className="cart-total-details">
-                                <p>Total:</p>
-                                <b>₹{getTotalCartAmount()-discountDetails.discount_amount}</b>
-                            </div>
+                <input type="email" name="email" placeholder="Email address" onChange={handleInputChange} />
+                <input type="text" name="street" placeholder="Street" onChange={handleInputChange} />
+                <div className="multi-fields">
+                    <input type="text" name="city" placeholder="City" onChange={handleInputChange} />
+                    <input type="text" name="state" placeholder="State" onChange={handleInputChange} />
+                </div>
+                <div className="multi-fields">
+                    <input type="text" name="pinCode" placeholder="Pin Code" onChange={handleInputChange} />
+                    <input type="text" name="country" placeholder="Country" onChange={handleInputChange} />
+                </div>
+                <input type="text" name="phoneNo" placeholder="Phone" onChange={handleInputChange} />
+            </div>
+            <div className="place-order-right">
+                <div className="cart-total">
+                    <h2>Cart Totals</h2>
+                    <div>
+                        <div className="cart-total-details">
+                            <p>Subtotal:</p>
+                            <p>₹{getTotalCartAmount()}</p>
                         </div>
-                        <button type="button" onClick={() => setShowModal(true)}>
-                            PROCEED TO PAYMENT
-                        </button>
+                        <hr />
+                        <div className="cart-total-details">
+                            <p>Delivery Fee:</p>
+                            <p>₹0.00</p>
+                        </div>
+                        <hr />
+                        <div className="cart-total-details discount">
+                            <p>Discount:</p>
+                            <p>-₹{discountDetails.discount_amount || 0}</p>
+                        </div>
+                        <hr />
+                        <div className="cart-total-details">
+                            <p>Total:</p>
+                            <b>₹{getTotalCartAmount() - (discountDetails.discount_amount || 0)}</b>
+                        </div>
                     </div>
+                    <button type="button" onClick={handlePlaceOrder} disabled={loading}>
+                        {loading ? <div className="spinner"></div> : 'PROCEED TO PAY'}
+                    </button>
                 </div>
-            </form>
-
-            {showModal && (
-                <div className="payment-modal">
-                    <div className="modal-content">
-                        <h2>Scan & Pay</h2>
-                        <h3>₹{getTotalCartAmount()-discountDetails.discount_amount}</h3>
-                        <img src={qr} alt="QR Code" className="qr-code" />
-                        <p className="timer">
-                            Time left: <b>{Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}</b>
-                        </p>
-                        <label className="upload-label">
-                            Upload Screenshot of Payment
-                            <input type="file" accept="image/*" onChange={handleFileUpload} />
-                        </label>
-                        {paymentProof && (
-    <button
-        className="done-btn"
-        onClick={handlePlaceOrder}
-        disabled={loading} // Disable only during loading
-    >
-        {loading ? <div className="spinner"></div> : 'Place Order'}
-    </button>
-)}
-                        <button className="close-btn" onClick={() => setShowModal(false)}>
-                            X
-                        </button>
-                    </div>
-                </div>
-            )}
-        </>
+            </div>
+        </form>
     );
 };
 

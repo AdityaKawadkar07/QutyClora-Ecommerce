@@ -11,10 +11,16 @@ import {v2 as cloudinary} from 'cloudinary'
 import cron from 'node-cron'
 import { v4 as uuidv4 } from 'uuid';
 import streamifier from 'streamifier';
+import Razorpay from 'razorpay'
 
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
+
+export const instance = new Razorpay({
+    key_id: process.env.RAZORPAY_API_KEY,
+    key_secret: process.env.RAZORPAY_API_SECRET
+})
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
@@ -615,14 +621,10 @@ items: [
           required: true,
         },
       },
-      paymentSS: {
-        type: String, // This will store the URL or path of the uploaded payment screenshot
-        required: true,
-      },
       status: {
         type: String,
-        enum: ["Processing","Placed", "Out for Delivery", "Delivered"],
-        default: "Processing",
+        enum: ["Placed", "Out for Delivery", "Delivered"],
+        default: "Placed",
       },
       date: {
         type: Date,
@@ -634,102 +636,100 @@ items: [
       },
   });
   
+//API to initiate Razorpay order
+app.post("/create-razorpay-order", fetchUser, async (req, res) => {
+    try {
+      const { amount } = req.body;
+  
+      if (!amount || isNaN(amount)) {
+        return res.status(400).json({ success: false, message: "Invalid amount" });
+      }
+  
+      const options = {
+        amount: amount * 100, // amount in smallest currency unit (paise)
+        currency: "INR",
+        receipt: `rcpt_${Date.now()}`,
+      };
+  
+      const order = await instance.orders.create(options);
+  
+      res.status(200).json({
+        success: true,
+        orderId: order.id,
+        amount: order.amount,
+        currency: order.currency,
+      });
+    } catch (error) {
+      console.error("Razorpay Order Error:", error);
+      res.status(500).json({ success: false, message: "Failed to create Razorpay order" });
+    }
+  });
+  
 
 //Placing user order from frontend
-app.post('/placeorder', upload.single('paymentSS'), fetchUser, async (req, res) => {
+app.post('/placeorder', fetchUser, async (req, res) => {
     try {
-        console.log("Placing Order...");
-
-        const { items, amount, address, discount_name, discount_amount } = JSON.parse(req.body.data);
-
-        
-        console.log("Discount Name:", discount_name); // Check if the discount name is coming through correctly
-        console.log("Discount Amount:", discount_amount); // Check if the discount amount is coming through correctly
-
-        // Validate required fields
-        if (!items || !Array.isArray(items) || items.length === 0) {
-            return res.status(400).json({ success: false, message: "Items are required and should be an array" });
-        }
-        if (!amount || isNaN(amount) || amount <= 0) {
-            return res.status(400).json({ success: false, message: "Invalid amount" });
-        }
-        if (!address || !address.addressLine || !address.phoneNo) {
-            return res.status(400).json({ success: false, message: "Address with addressLine and phoneNo is required" });
-        }
-        if (!req.file) {
-            return res.status(400).json({ success: false, message: "Payment screenshot is required" });
-        }
-        if (discount_amount && isNaN(discount_amount)) {
-            return res.status(400).json({ success: false, message: "Invalid discount amount" });
-        }
-
-        // Upload paymentSS to Cloudinary
-        const streamUpload = () => {
-            return new Promise((resolve, reject) => {
-                const stream = cloudinary.uploader.upload_stream(
-                    {
-                        folder: "payment_screenshots",
-                        public_id: `payment_${Date.now()}`,
-                    },
-                    (error, result) => {
-                        if (result) {
-                            resolve(result);
-                        } else {
-                            reject(error);
-                        }
-                    }
-                );
-                streamifier.createReadStream(req.file.buffer).pipe(stream);
-            });
-        };
-        
-        const cloudinaryUpload = await streamUpload();
-        
-
-        if (!cloudinaryUpload.secure_url) {
-            return res.status(500).json({ success: false, message: "Failed to upload payment screenshot" });
-        }
-
-        // Create unique orderId
-        const orderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
-
-        // Create new order
-        const newOrder = new Orders({
-            orderId,
-            userId: req.user.id, // Fetched from the auth token
-            items: items.map(item => ({
-                name: item.name,
-                quantity: item.quantity,
-            })),            
-            amount,
-            discount: {
-                discount_name: discount_name || "", // Default to empty string if not provided
-                discount_amount: discount_amount || 0 // Default to 0 if not provided
-            },
-            address: {
-                addressLine: address.addressLine,
-                phoneNo: address.phoneNo
-            },
-            paymentSS: cloudinaryUpload.secure_url, // Cloudinary URL stored in DB
-            status: "Processing", // Default status
-            date: Date.now(),
-            payment: true, // Assuming payment is successful after uploading screenshot
-        });
-
-        // Save order to database
-        await newOrder.save();
-        console.log("Order Placed Successfully");
-
-        res.status(201).json({
-            success: true,
-            message: "Order placed successfully",
-            orderId: newOrder.orderId
-        });
+      const {
+        items,
+        amount,
+        address,
+        discount_name,
+        discount_amount,
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+      } = req.body;
+  
+      // Validate required fields
+      if (!items || !Array.isArray(items) || items.length === 0) {
+        return res.status(400).json({ success: false, message: "Items are required" });
+      }
+      if (!amount || isNaN(amount)) {
+        return res.status(400).json({ success: false, message: "Invalid amount" });
+      }
+      if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+        return res.status(400).json({ success: false, message: "Missing Razorpay payment details" });
+      }
+  
+      // Verify Razorpay signature
+      const body = razorpay_order_id + "|" + razorpay_payment_id;
+      const expectedSignature = crypto
+        .createHmac("sha256", process.env.RAZORPAY_API_SECRET)
+        .update(body.toString())
+        .digest("hex");
+  
+      if (expectedSignature !== razorpay_signature) {
+        return res.status(400).json({ success: false, message: "Invalid signature" });
+      }
+  
+      const orderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+  
+      const newOrder = new Orders({
+        orderId,
+        userId: req.user.id,
+        items: items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+        })),
+        amount,
+        discount: {
+          discount_name: discount_name || "",
+          discount_amount: discount_amount || 0,
+        },
+        address,
+        status: "Placed",
+        payment: true,
+      });
+  
+      await newOrder.save();
+  
+      res.status(201).json({ success: true, message: "Order placed", orderId });
     } catch (error) {
-        console.error("Error placing order:", error);
-        res.status(500).json({ success: false, message: "Internal Server Error" });
+      console.error("Place Order Error:", error);
+      res.status(500).json({ success: false, message: "Internal server error" });
     }
-}); 
+  });
+  
 
 //Get all Order
 app.get('/getallorders', async (req, res) => {

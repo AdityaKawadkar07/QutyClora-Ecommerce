@@ -93,7 +93,6 @@ const Orders = () => {
         <p>Contact</p>
         <p>Items</p>
         <p>Total</p>
-        <p>Payment Receipt</p>
         <p>Status</p>
       </div>
 
@@ -182,25 +181,11 @@ const Orders = () => {
                 </div>
               )}
             </div>
-
-            {/* Payment Receipt Link */}
-            <p>
-              <a
-                href={order.paymentSS}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="payment-link"
-              >
-                View Payment
-              </a>
-            </p>
-
             {/* Status Dropdown */}
             <select
               value={order.status}
               onChange={(e) => updateOrderStatus(order._id, e.target.value)}
             >
-              <option value="Processing">Processing</option>
               <option value="Placed">Placed</option>
               <option value="Out for Delivery">Out for Delivery</option>
               <option value="Delivered">Delivered</option>

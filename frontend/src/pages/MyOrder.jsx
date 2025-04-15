@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import './CSS/MyOrder.css';
-import ReceiptModal from '../components/ReceiptModal/ReceiptModal';
+import React, { useEffect, useState } from "react";
+import "./CSS/MyOrder.css";
+import ReceiptModal from "../components/ReceiptModal/ReceiptModal";
 
-const BACKEND_API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:4000';
+const BACKEND_API_URL =
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
 
 const MyOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -16,9 +17,9 @@ const MyOrder = () => {
     const fetchOrders = async () => {
       try {
         const response = await fetch(`${BACKEND_API_URL}/getmyorders`, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'auth-token': `${localStorage.getItem('auth-token')}`,
+            "auth-token": `${localStorage.getItem("auth-token")}`,
           },
         });
 
@@ -27,11 +28,11 @@ const MyOrder = () => {
         if (data.success) {
           setOrders(data.orders);
         } else {
-          setError(data.message || 'Failed to load orders');
+          setError(data.message || "Failed to load orders");
         }
       } catch (err) {
-        console.error('Error fetching orders:', err);
-        setError('Error fetching orders');
+        console.error("Error fetching orders:", err);
+        setError("Error fetching orders");
       } finally {
         setLoading(false);
       }
@@ -52,9 +53,11 @@ const MyOrder = () => {
     setSelectedOrder(null);
   };
 
-  if (loading) return <h2 className="myorder-loading">Loading your orders...</h2>;
+  if (loading)
+    return <h2 className="myorder-loading">Loading your orders...</h2>;
   if (error) return <h2 className="myorder-error">{error}</h2>;
-  if (orders.length === 0) return <h2 className="myorder-empty">No orders found!</h2>;
+  if (orders.length === 0)
+    return <h2 className="myorder-empty">No orders found!</h2>;
 
   return (
     <div className="myorder">
@@ -64,7 +67,8 @@ const MyOrder = () => {
           <p>Order ID</p>
           <p>Products</p>
           <p>Total Cost</p>
-          {orders.some(order => order.status !== 'Processing') && <p>Payment Receipt</p>}          <p>Status</p>
+          <p>Payment Receipt</p>
+          <p>Status</p>
         </div>
         <hr />
         {orders.map((order) => (
@@ -75,21 +79,26 @@ const MyOrder = () => {
             >
               <p>{order.orderId}</p>
               <p className="myorder-toggle">
-                {expandedOrder === order.orderId ? 'Hide Products' : 'View Products'}
+                {expandedOrder === order.orderId
+                  ? "Hide Products"
+                  : "View Products"}
               </p>
               <p>₹{order.amount}</p>
-              {order.status !== 'Processing' && (
-      <button
-        className="view-receipt-btn"
-        onClick={(e) => {
-          e.stopPropagation();
-          openReceiptModal(order);
-        }}
-      >
-        View Receipt
-      </button>
-    )}
-              <p className={`myorder-status ${order.status.replace(/\s/g, '').toLowerCase()}`}>
+              <button
+                className="view-receipt-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openReceiptModal(order);
+                }}
+              >
+                View Receipt
+              </button>
+
+              <p
+                className={`myorder-status ${order.status
+                  .replace(/\s/g, "")
+                  .toLowerCase()}`}
+              >
                 {order.status}
               </p>
             </div>
@@ -107,8 +116,10 @@ const MyOrder = () => {
           </div>
         ))}
       </div>
-            {/* Receipt Modal */}
-            {selectedOrder && <ReceiptModal order={selectedOrder} onClose={closeReceiptModal} />}
+      {/* Receipt Modal */}
+      {selectedOrder && (
+        <ReceiptModal order={selectedOrder} onClose={closeReceiptModal} />
+      )}
     </div>
   );
 };
