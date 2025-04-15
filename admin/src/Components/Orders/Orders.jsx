@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Orders.css";
 import Statistics from "../Statistics/Statistics";
+import ViewReceiptModal from "../ViewReceiptModal/ViewReceiptModal";
 
 const API_BASE_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
@@ -8,11 +9,12 @@ const API_BASE_URL =
 const Orders = () => {
 
   const [orders, setOrders] = useState([]);
-
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [expandedAddress, setExpandedAddress] = useState(null);
   const [expandedAmount, setExpandedAmount] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
+  const [showReceipt, setShowReceipt] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const toggleAmountDetails = (orderId) => {
     setExpandedAmount(expandedAmount === orderId ? null : orderId);
@@ -81,6 +83,18 @@ const Orders = () => {
     }
   };
 
+  // Open receipt modal
+const handleViewReceipt = (order) => {
+  setSelectedOrder(order);
+  setShowReceipt(true);
+};
+
+// Close receipt modal
+const closeReceipt = () => {
+  setShowReceipt(false);
+  setSelectedOrder(null);
+};
+
   return (
     <div>
     <div className="orders">
@@ -94,6 +108,7 @@ const Orders = () => {
         <p>Items</p>
         <p>Total</p>
         <p>Status</p>
+        <p>Receipt</p>
       </div>
 
       <div className="orders-allorders">
@@ -190,6 +205,12 @@ const Orders = () => {
               <option value="Out for Delivery">Out for Delivery</option>
               <option value="Delivered">Delivered</option>
             </select>
+            <button
+  className="view-receipt-btn"
+  onClick={() => handleViewReceipt(order)}
+>
+  View Receipt
+</button>
           </div>
         ))}
       </div>
@@ -197,6 +218,14 @@ const Orders = () => {
     <div className="stats">
       <Statistics/>
     </div>
+          {/* View Receipt Modal */}
+          {showReceipt && (
+        <ViewReceiptModal
+          order={selectedOrder}
+          onClose={closeReceipt}
+          getUserName={getUserName}
+        />
+      )}
     </div>
   );
 };

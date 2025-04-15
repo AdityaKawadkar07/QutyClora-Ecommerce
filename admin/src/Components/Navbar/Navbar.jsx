@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
-import navlogo from "../../assets/nav-logo.svg";
+import navlogo from "../../assets/logo.png";
 import navProfile from "../../assets/nav-logo.png";
 import { toast } from "react-toastify";
 

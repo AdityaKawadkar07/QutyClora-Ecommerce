@@ -27,6 +27,7 @@
         max-width: none;
         height: auto;
         justify-content: center;
+        top: 50px; /* This shifts the whole sidebar down */
     }
     .sidebar-item{
         margin: 0;

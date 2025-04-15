@@ -4,7 +4,7 @@
     justify-content: space-between;
     padding: 15px 60px;
     box-shadow: 0 1px 3px -2px #000;
-    background: white;
+    background: lightblue;
 }
 
 .nav-right {
@@ -38,23 +38,63 @@
 }
 
 /* Responsive adjustments for smaller screens */
+
+/* For screens 800px and below */
 @media (max-width: 800px) {
     .navbar {
         padding: 10px 20px;
+        justify-content: space-between;  /* Space between logo and logout button */
     }
 
     .nav-logo {
         width: 140px;
+        margin: 0 auto;  /* Center the logo */
     }
 
-    /* Hide profile icon and welcome message on mobile */
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: flex-end;  /* Keep the logout button on the right side */
+    }
+
     .nav-profile,
     .nav-right h5 {
-        display: none;
+        display: none;  /* Hide the profile icon and welcome message */
     }
 
     .logout-btn {
         padding: 6px 10px;
         font-size: 14px;
+    }
+}
+
+/* For screens 500px and below */
+@media (max-width: 500px) {
+    .navbar {
+        padding: 10px;
+        justify-content: space-between;
+    }
+
+    .nav-logo {
+        width: 120px;  /* Adjust logo size for very small screens */
+        margin: 0 auto;  /* Center logo */
+    }
+
+    .nav-profile,
+    .nav-right h5 {
+        display: none;  /* Hide profile and welcome message */
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: flex-end;  /* Keep logout button on the right side */
+    }
+
+    .logout-btn {
+        padding: 4px 8px;  /* Make logout button smaller */
+        font-size: 12px;
     }
 }
