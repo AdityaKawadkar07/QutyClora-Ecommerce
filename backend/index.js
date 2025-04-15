@@ -1104,13 +1104,13 @@ app.post("/admin-reset-password", (req, res) => {
 });
 
 
-// Check if we're running in production or development
-if (process.env.NODE_ENV === 'development') {
-    // Running locally, use app.listen
-    app.listen(PORT, () => {
-      console.log("Server Running on Port " + PORT);
-    });
-  } else {
-    // On Vercel, export the app for serverless
-    module.exports = app;  // Changed from `export default`
-  }
+// app.listen(PORT,(error)=>{
+//     if(!error){
+//         console.log("Server Running on Port "+PORT);
+//     }
+//     else{
+//         console.log("Error:"+error);
+//     }
+// });
+
+export default app;
