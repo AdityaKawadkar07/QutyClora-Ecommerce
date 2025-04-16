@@ -722,6 +722,24 @@ app.post('/placeorder', fetchUser, async (req, res) => {
       });
   
       await newOrder.save();
+
+      //Fetch User Email
+      const user = await Users.findById(req.user.id);
+      if (user && user.email) {
+        // Send order confirmation email
+        await sendEmail(user.email, {
+          orderId,
+          date: new Date().toLocaleString(),
+          address,
+          items: items.map(item => ({
+            name: item.name,
+            quantity: item.quantity,
+          })),
+          amount,
+          discount_name: discount_name || "",
+          discount_amount: discount_amount || 0,
+        }, "order-receipt");
+      }
   
       res.status(201).json({ success: true, message: "Order placed", orderId });
     } catch (error) {
@@ -814,7 +832,7 @@ app.post("/forgot-password", async (req, res) => {
     user.resetTokenExpiry = Date.now() + 3600000; // 1 hour
     await user.save();
 
-    const resetLink = `${process.env.BASE_URL}/reset-password/${resetToken}`;
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
     try {
         // Send the email with the reset link

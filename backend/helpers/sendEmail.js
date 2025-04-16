@@ -3,6 +3,10 @@ import { createTransport } from 'nodemailer';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 const sendEmail = async (email, content, type = "reset") => {
     // Dynamically import 'nodemailer-express-handlebars'
     const hbs = (await import('nodemailer-express-handlebars')).default;
@@ -15,16 +19,27 @@ const sendEmail = async (email, content, type = "reset") => {
         },
     });
 
-    // Configure Handlebars template
+    // // Configure Handlebars template
+    // const handlebarOptions = {
+    //     viewEngine: {
+    //         extName: '.hbs',
+    //         partialsDir: path.resolve('./views'),
+    //         defaultLayout: false,
+    //     },
+    //     viewPath: path.resolve('./views'),
+    //     extName: '.hbs',
+    // };
+
     const handlebarOptions = {
         viewEngine: {
             extName: '.hbs',
-            partialsDir: path.resolve('./views'),
+            partialsDir: path.join(__dirname, '../views'),
             defaultLayout: false,
         },
-        viewPath: path.resolve('./views'),
+        viewPath: path.join(__dirname, '../views'),
         extName: '.hbs',
     };
+    
 
     transporter.use('compile', hbs(handlebarOptions));
 
@@ -50,7 +65,16 @@ const sendEmail = async (email, content, type = "reset") => {
                 otp: content, // OTP code
             },
         };
-    } else {
+    } else if (type === "order-receipt") {
+        mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Order Confirmation Receipt',
+            template: 'orderReceipt', // Template name
+            context: content, // This should include orderId, date, address, items, amount, discount_name, discount_amount
+        };
+    }
+     else {
         return { success: false, message: "Invalid email type" };
     }
 

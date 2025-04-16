@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .receipt-container {
+      width: 100%;
+      padding: 20px;
+      border: 1px solid #ccc;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f5f5f5;
+    }
+    .summary {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="receipt-container">
+    <h2>Order Confirmation</h2>
+    <p>Thank you for your order! Here are the details:</p>
+
+    <p><strong>Order ID:</strong> {{orderId}}</p>
+    <p><strong>Date:</strong> {{date}}</p>
+    <p><strong>Delivery Address:</strong> {{address}}</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each items}}
+          <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.quantity}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <div class="summary">
+      <p><strong>Total Amount:</strong> ₹{{amount}}</p>
+      {{#if discount_name}}
+        <p><strong>Discount Applied:</strong> {{discount_name}} (₹{{discount_amount}})</p>
+      {{/if}}
+    </div>
+
+    <p>We’ll notify you as your order status updates. For any queries, contact us anytime.</p>
+    <p><em>~ Your E-Commerce Team</em></p>
+  </div>
+</body>
+</html>

@@ -44,7 +44,7 @@ const Admin = () => {
 
       {/* Sidebar with conditional class */}
       <div className={`sidebar-container ${sidebarOpen || !isMobile ? 'show' : ''}`}>
-        <Sidebar />
+      <Sidebar closeSidebar={() => isMobile && setSidebarOpen(false)} />
       </div>
 
       {/* Main content */}
