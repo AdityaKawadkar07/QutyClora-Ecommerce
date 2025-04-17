@@ -12,7 +12,7 @@ import cron from "node-cron";
 import { v4 as uuidv4 } from "uuid";
 import streamifier from "streamifier";
 import Razorpay from "razorpay";
-import generateReceiptPDF from "./helpers/generateReceiptPdf.js";
+import generateReceiptPDF from "./helpers/generateReceiptPDF.js";
 import { fileURLToPath } from "url";
 import fs from 'fs';
 
