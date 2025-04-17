@@ -782,7 +782,12 @@ app.post("/placeorder", fetchUser, async (req, res) => {
   // Send email receipt with PDF attachment
   const user = await Users.findById(req.user.id);
   if (user && user.email) {
-    const filePath = path.join(__dirname, 'temp', `receipt-${orderId}.pdf`);
+    //For localhost
+    // const filePath = path.join(__dirname, 'temp', `receipt-${orderId}.pdf`);
+
+    //For production
+    const filePath = path.join('/tmp', `receipt-${orderId}.pdf`);
+
 
     await generateReceiptPDF({
       orderId,
