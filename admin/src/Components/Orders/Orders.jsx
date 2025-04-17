@@ -15,6 +15,8 @@ const Orders = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [showReceipt, setShowReceipt] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [loadingOrderId, setLoadingOrderId] = useState(null);
+
 
   const toggleAmountDetails = (orderId) => {
     setExpandedAmount(expandedAmount === orderId ? null : orderId);
@@ -60,6 +62,7 @@ const Orders = () => {
 
   // Update order status
   const updateOrderStatus = async (orderId, newStatus) => {
+    setLoadingOrderId(orderId); // Start loading
     try {
       const res = await fetch(`${API_BASE_URL}/updateorderstatus/${orderId}`, {
         method: "PUT",
@@ -80,6 +83,9 @@ const Orders = () => {
     } catch (error) {
       console.error("Error updating order status:", error);
       alert("Error updating payment status");
+    }
+    finally {
+      setLoadingOrderId(null); // End loading
     }
   };
 
@@ -197,14 +203,21 @@ const closeReceipt = () => {
               )}
             </div>
             {/* Status Dropdown */}
-            <select
-              value={order.status}
-              onChange={(e) => updateOrderStatus(order._id, e.target.value)}
-            >
-              <option value="Placed">Placed</option>
-              <option value="Out for Delivery">Out for Delivery</option>
-              <option value="Delivered">Delivered</option>
-            </select>
+            <div className="status-wrapper">
+  {loadingOrderId === order._id ? (
+    <div className="spinner"></div> // or use a simple text like "Updating..."
+  ) : (
+    <select
+      value={order.status}
+      onChange={(e) => updateOrderStatus(order._id, e.target.value)}
+    >
+      <option value="Placed">Placed</option>
+      <option value="Out for Delivery">Out for Delivery</option>
+      <option value="Delivered">Delivered</option>
+    </select>
+  )}
+</div>
+
             <button
   className="view-receipt-btn"
   onClick={() => handleViewReceipt(order)}

@@ -1,0 +1,45 @@
+<h1 style="text-align: center; color: #D63384;">QutyClora</h1>
+
+<h2>Hello {{name}},</h2>
+
+<p>We wanted to inform you that the status of your order <strong>{{orderId}}</strong> has been updated to:</p>
+<h3 style="color: #007BFF;">{{status}}</h3>
+
+<p>Here’s a summary of your order:</p>
+
+<table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+  <thead>
+    <tr style="background-color: #f2f2f2;">
+      <th>Product</th>
+      <th>Qty</th>
+      <th>Rate</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each items}}
+    <tr>
+      <td>{{name}}</td>
+      <td>{{quantity}}</td>
+      <td>₹{{price}}</td>
+      <td>₹{{total}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<p>
+  <strong>Subtotal:</strong> ₹{{subtotal}}<br />
+  {{#if discount_name}}
+    <strong>Discount ({{discount_name}}):</strong> -₹{{discount_amount}}<br />
+  {{/if}}
+  <strong>Final Amount Paid:</strong> ₹{{amount}}
+</p>
+
+<p><strong>Shipping Address:</strong><br />
+  {{address}}<br />
+  <strong>Phone:</strong> {{phoneNo}}</p>
+
+<p><small>Order Date: {{date}}</small></p>
+
+<p>Thank you for shopping with <strong>QutyClora</strong>! We hope to see you again soon.</p>

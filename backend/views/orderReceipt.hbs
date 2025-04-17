@@ -4,70 +4,157 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
     }
     .receipt-container {
-      width: 100%;
-      padding: 20px;
-      border: 1px solid #ccc;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 700px;
       margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    h2 {
+    .header {
       text-align: center;
-      color: #333;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      margin: 0;
+      color: #7b3f00;
+    }
+    .header p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #555;
+    }
+    .download-btn {
+      background-color: #7b3f00;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    .download-btn:hover {
+      background-color: #5e2f00;
+    }
+    .info {
+      margin-bottom: 20px;
+    }
+    .info p {
+      margin: 4px 0;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-bottom: 20px;
     }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 10px;
       text-align: left;
+      font-size: 14px;
     }
-    th {
+    table th {
       background-color: #f5f5f5;
     }
     .summary {
-      margin-top: 20px;
+      text-align: right;
+      font-size: 14px;
+    }
+    .summary p {
+      margin: 5px 0;
+    }
+    .footer {
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+      margin-top: 30px;
     }
   </style>
+
+  <!-- Add JS libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-  <div class="receipt-container">
-    <h2>Order Confirmation</h2>
-    <p>Thank you for your order! Here are the details:</p>
+  <div id="receiptContent" class="receipt-container">
+    <div class="header">
+      <h1>QutyClora</h1>
+      <p>Thank you for your order!</p>
+      <p>support@qutyclora.com | +91-9876543210</p>
+    </div>
 
-    <p><strong>Order ID:</strong> {{orderId}}</p>
-    <p><strong>Date:</strong> {{date}}</p>
-    <p><strong>Delivery Address:</strong> {{address}}</p>
+    <div class="info">
+      <p><strong>Order ID:</strong> {{orderId}}</p>
+      <p><strong>Date:</strong> {{date}}</p>
+      <p><strong>Delivery Address:</strong> {{address}}</p>
+    </div>
 
     <table>
       <thead>
         <tr>
           <th>Product</th>
+          <th>Rate (₹)</th>
           <th>Quantity</th>
+          <th>Total (₹)</th>
         </tr>
       </thead>
       <tbody>
         {{#each items}}
           <tr>
             <td>{{this.name}}</td>
+            <td>{{this.price}}</td>
             <td>{{this.quantity}}</td>
+            <td>{{multiply this.price this.quantity}}</td>
           </tr>
         {{/each}}
       </tbody>
     </table>
 
     <div class="summary">
-      <p><strong>Total Amount:</strong> ₹{{amount}}</p>
+      <p><strong>Subtotal:</strong> ₹{{subtotal}}</p>
       {{#if discount_name}}
-        <p><strong>Discount Applied:</strong> {{discount_name}} (₹{{discount_amount}})</p>
+        <p><strong>Discount ({{discount_name}}):</strong> - ₹{{discount_amount}}</p>
       {{/if}}
+      <p><strong>Total Amount Paid:</strong> ₹{{amount}}</p>
     </div>
 
-    <p>We’ll notify you as your order status updates. For any queries, contact us anytime.</p>
-    <p><em>~ Your E-Commerce Team</em></p>
+    <div class="footer">
+      We'll keep you updated as your order progresses.<br/>
+      Thank you for choosing QutyClora!
+    </div>
   </div>
+
+  {{!-- <!-- JS to trigger receipt download -->
+<script>
+  async function downloadReceipt() {
+    const { jsPDF } = window.jspdf; // ✅ works only after the script loads
+    const receipt = document.getElementById("receiptContent");
+
+    if (!receipt || !jsPDF) {
+      alert("Receipt or jsPDF not found.");
+      return;
+    }
+
+    const canvas = await html2canvas(receipt, { scale: 2 });
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const margin = 10;
+    const usableWidth = pageWidth - margin * 2;
+    const imgHeight = (canvas.height * usableWidth) / canvas.width;
+
+    pdf.addImage(imgData, "PNG", margin, 10, usableWidth, imgHeight);
+    pdf.save("QutyClora_Receipt.pdf"); // Avoid Handlebars syntax in client-side
+  }
+</script> --}}
+
 </body>
 </html>
