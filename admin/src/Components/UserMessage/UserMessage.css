@@ -47,3 +47,74 @@
 .usermessage-remove-icon:hover {
     opacity: 0.8;
 }
+
+/* Laptops & Large Screens - Slight spacing adjustment */
+@media (max-width: 1280px) {
+    .usermessage-header,
+    .usermessage-row {
+      gap: 16px;
+      font-size: 15px;
+    }
+  }
+  
+  /* Medium Laptops/Tablets */
+  @media (max-width: 1080px) {
+    .usermessage-header,
+    .usermessage-row {
+      grid-template-columns: 1fr 1fr 1fr 1fr 0.4fr;
+      font-size: 14px;
+    }
+  }
+  
+  /* Tablets and smaller laptops */
+  @media (max-width: 800px) {
+    .usermessage-header,
+    .usermessage-row {
+      gap: 12px;
+      font-size: 13px;
+    }
+  
+    .usermessage-remove-icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+  
+  /* Mobile Devices */
+  @media (max-width: 500px) {
+    .usermessage-header {
+      display: none; /* Hide header on mobile */
+    }
+  
+    .usermessage-row {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      background-color: #fdfdfd;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+  
+    .usermessage-row p {
+      margin: 6px 0;
+      font-size: 14px;
+      width: 100%;
+    }
+  
+    .usermessage-row p::before {
+      content: attr(data-label) ": ";
+      font-weight: 600;
+      color: #444;
+    }
+  
+    .usermessage-remove-icon {
+      align-self: flex-end;
+      width: 20px;
+      height: 20px;
+      margin-top: 10px;
+    }
+  }
+  

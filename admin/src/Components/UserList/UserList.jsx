@@ -50,9 +50,9 @@ const UserList = () => {
             <div className="userlist-allusers">
                 {allUsers.map((user, index) => (
                     <div key={index} className="userlist-row">
-                        <p>{user.name}</p>
-                        <p>{user.email}</p>
-                        <p>{calculateCartItems(user.cartData)}</p>
+<p data-label="Name">{user.name}</p>
+<p data-label="Email">{user.email}</p>
+<p data-label="Items in Cart">{calculateCartItems(user.cartData)}</p>
                         <img src={cross_icon} className='userlist-remove-icon' alt="Remove" onClick={() => remove_user(user._id)} />
 
                     </div>

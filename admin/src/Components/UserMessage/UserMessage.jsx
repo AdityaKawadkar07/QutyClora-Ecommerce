@@ -55,10 +55,10 @@ const UserMessage = () => {
             <div className="usermessage-allmessage">        
               {messages.map((msg, index) => (
               <div key={index} className="usermessage-row">
-                <p>{msg.name}</p>
-                <p>{msg.email}</p>
-                <p>{msg.phone}</p>
-                <p>{msg.message}</p>
+    <p data-label="Name">{msg.name}</p>
+    <p data-label="Email">{msg.email}</p>
+    <p data-label="Whatsapp Number">{msg.phone}</p>
+    <p data-label="Message">{msg.message}</p>
                 <img src={cross_icon} className='usermessage-remove-icon' alt="Remove" onClick={() => handleDelete(msg._id)} />
               </div>
             ))}

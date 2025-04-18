@@ -47,3 +47,60 @@
 .userlist-remove-icon:hover {
     opacity: 0.8;
 }
+/* Tablets and smaller laptops (max-width: 800px) */
+@media (max-width: 800px) {
+    .userlist-header,
+    .userlist-row {
+        grid-template-columns: 1fr 1.5fr 1fr 0.5fr;
+        gap: 10px;
+        font-size: 14px;
+    }
+
+    .userlist h1 {
+        font-size: 22px;
+    }
+
+    .userlist-remove-icon {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* Mobile Devices (max-width: 500px) */
+@media (max-width: 500px) {
+    .userlist-header {
+        display: none; /* Hide table header */
+    }
+
+    .userlist-row {
+        display: flex;
+        flex-direction: column;
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .userlist-row p {
+        font-size: 15px;
+        margin: 6px 0;
+        line-height: 1.4;
+        color: #333;
+    }
+
+    .userlist-row p::before {
+        content: attr(data-label) ": ";
+        font-weight: 600;
+        color: #555;
+    }
+
+    .userlist-remove-icon {
+        align-self: flex-end;
+        margin-top: 10px;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+}
+

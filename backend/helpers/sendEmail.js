@@ -93,7 +93,15 @@ const sendEmail = async (email, content, type = "reset",attachmentPath = null) =
             template: 'order-status-update',
             context: content,
         };
-    }
+    }else if (type === "newsletter") {
+        mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Thanks for Subscribing to Our Newsletter!',
+            template: 'newsletter', // new handlebars template
+            context: content,       // should contain { email }
+        };
+    }    
      else {
         return { success: false, message: "Invalid email type" };
     }

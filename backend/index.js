@@ -15,6 +15,7 @@ import Razorpay from "razorpay";
 import generateReceiptPDF from "./helpers/generateReceiptPDF.js";
 import { fileURLToPath } from "url";
 import fs from 'fs';
+import bcrypt from "bcrypt";
 
 dotenv.config();
 
@@ -31,14 +32,21 @@ export const instance = new Razorpay({
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
-const ADMIN_EMAIL = "adityakawadkar7@gmail.com";
-let ADMIN_PASSWORD = "Admin@123";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL_ID;
+const ADMIN_PASSWORD_FILE = path.join(__dirname, 'admin.json');
+
+// Load admin password (only hashed password is stored)
+let { password: storedHashedPassword } = JSON.parse(fs.readFileSync(ADMIN_PASSWORD_FILE, 'utf-8'));
+// let ADMIN_PASSWORD = "Admin@123";
 let otpStorage = {};
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+
+// app.use('/public', express.static('assets'));
+
 
 //Database Connection with MongoDB
 mongoose
@@ -1253,7 +1261,7 @@ cron.schedule("0 0 * * *", async () => {
 app.post("/admin-login", async (req, res) => {
   const { email, password } = req.body;
 
-  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+  if (email === ADMIN_EMAIL && await bcrypt.compare(password, storedHashedPassword)) {
     const adminToken = jwt.sign({ email }, SECRET_KEY, { expiresIn: "2h" });
     return res.json({ success: true, token: adminToken });
   } else {
@@ -1279,7 +1287,7 @@ app.post("/admin-forgot-password", async (req, res) => {
 });
 
 // Verify OTP and Reset Password
-app.post("/admin-reset-password", (req, res) => {
+app.post("/admin-reset-password", async (req, res) => {
   const { email, otp, newPassword } = req.body;
 
   if (email !== ADMIN_EMAIL) {
@@ -1290,10 +1298,66 @@ app.post("/admin-reset-password", (req, res) => {
     return res.status(400).json({ success: false, message: "Invalid OTP" });
   }
 
-  ADMIN_PASSWORD = newPassword; // Update password
-  delete otpStorage[email]; // Clear OTP after use
-  return res.json({ success: true, message: "Password updated successfully" });
+  try {
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    storedHashedPassword = hashedNewPassword;
+
+    // Update the JSON file
+    fs.writeFileSync(ADMIN_PASSWORD_FILE, JSON.stringify({ password: hashedNewPassword }, null, 2));
+    return res.json({ success: true, message: "Password updated successfully" });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Failed to update password" });
+  }
 });
+
+const NewsLetterEmail = new mongoose.model("NewsLetterEmail",{
+  email: {
+    type: String,
+    required: true,
+    unique: true, // prevent duplicate subscriptions
+    lowercase: true,
+    trim: true
+  },
+  subscribedAt: {
+    type: Date,
+    default: Date.now
+  }
+})
+
+
+// Newsletter route
+app.post("/newsletter", async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ success: false, message: "Email is required" });
+  }
+
+  try {
+    // Step 1: Send subscription email regardless of existing
+    const result = await sendEmail(email, { email }, "newsletter");
+
+    if (result.success) {
+      // Step 2: Check if already subscribed
+      const existing = await NewsLetterEmail.findOne({ email });
+
+      if (!existing) {
+        const newEntry = new NewsLetterEmail({ email });
+        await newEntry.save();
+      }
+
+      res.json({ success: true, message: "Subscription email sent" });
+    } else {
+      res.status(500).json({ success: false, message: "Failed to send email" });
+    }
+  } catch (error) {
+    console.error("Newsletter Error:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+
+
 
 // app.listen(PORT, (error) => {
 //   if (!error) {

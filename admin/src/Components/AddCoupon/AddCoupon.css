@@ -136,3 +136,23 @@
         max-width: 100%;
     }
 }
+@media (max-width: 500px) {
+    .all-coupons {
+        padding: 15px;
+        overflow-x: auto; /* Enables horizontal scroll for table if needed */
+    }
+
+    .coupon-table {
+        font-size: 12px; /* Smaller text for small screens */
+        min-width: 450px; /* Ensures table doesn't shrink too much */
+    }
+
+    .coupon-table th,
+    .coupon-table td {
+        padding: 8px;
+    }
+
+    .delete-btn {
+        padding: 6px 10px;
+    }
+}

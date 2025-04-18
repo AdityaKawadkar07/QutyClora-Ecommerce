@@ -7,10 +7,10 @@ import { toast } from "react-toastify";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const isLoggedIn = localStorage.getItem("auth-token"); // Check if user is logged in
+  const isLoggedIn = sessionStorage.getItem("auth-token"); // Check if user is logged in
 
   const handleLogout = () => {
-    localStorage.removeItem("auth-token");
+    sessionStorage.removeItem("auth-token");
     localStorage.removeItem("user-id");
     navigate("/login"); // Redirect to login page
     toast.success("Logout Succesful");
